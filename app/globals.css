@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+body {
+  font-family: var(--font-lora);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-league);
+}
+
+
+@theme {
+  --color-grey: #333333;
+  --color-green: #B9D2B1;
+  --color-white: #F8F9FA;
+  --color-aqua: #6FBBB9;
+  --color-teal: #648688;
+}
