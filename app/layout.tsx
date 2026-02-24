@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Lora, League_Spartan } from "next/font/google";
+import { Poppins, League_Spartan } from "next/font/google";
 import "./globals.css";
 
-const lora = Lora({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-lora",
@@ -28,9 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-[#F8F9FA]">
+    <html lang="en" className="bg-white">
       <body
-        className={`${lora.variable} ${leagueSpartan.variable} antialiased `}
+        className={`${poppins.variable} ${leagueSpartan.variable} antialiased `}
       >
         {children}
       </body>

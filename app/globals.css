@@ -16,5 +16,7 @@ h1, h2, h3 {
   --color-green: #B9D2B1;
   --color-white: #F8F9FA;
   --color-aqua: #6FBBB9;
+  --color-aqua-gradient: #648688;
   --color-teal: #648688;
+  --color-yellow: #F0E6BE;
 }
