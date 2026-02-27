@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   title: "Tico",
   icons: "/svg/ticoHead.svg",
   description: "Tico",
+  viewport: "",
 };
 
 export default function RootLayout({

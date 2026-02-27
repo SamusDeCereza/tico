@@ -210,6 +210,10 @@ export default function Home() {
           }
       }
 
+      gsap.to(tico, {
+        
+      });
+
   }, []);
 
 
@@ -279,19 +283,19 @@ export default function Home() {
       </div>
 
       <div className="absolute top-0 left-0 w-full h-screen p-0! **:p-0! m-0!">
-        <div className="w-full h-full ">
+        <div className="w-full lg:h-full h-dvh">
           <div className="absolute right-1/2 top-8">
             <div className="*:overflow-visible! ">
               <SimpleParallax>
-                <Image src="/svg/form_1.svg" alt="" width={0} height={0} className="w-36 h-36 "></Image>
+                <Image src="/svg/form_1.svg" alt="" width={0} height={0} className="size-24 lg:size-36 "></Image>
               </SimpleParallax>
             </div>
           </div>
 
-          <div className="absolute bottom-8 -right-0">
+          <div className="absolute top-5/12 -right-8">
             <div className="*:overflow-visible! ">
               <SimpleParallax>
-                <Image src="/svg/triangle_1.svg" alt="" width={0} height={0} className="w-36 h-36"></Image>
+                <Image src="/svg/triangle_1.svg" alt="" width={0} height={0} className="size-24 lg:size-36"></Image>
               </SimpleParallax>
             </div>
           </div>
@@ -299,7 +303,7 @@ export default function Home() {
           <div className="absolute -left-58 top-36 rotate-45">
             <div className="*:overflow-visible! ">
               <SimpleParallax>
-                <Image src="/svg/star_1.svg" alt="" width={0} height={0} className="w-74 h-74"></Image>
+                <Image src="/svg/star_1.svg" alt="" width={0} height={0} className="size-60 lg:size-74"></Image>
               </SimpleParallax>
             </div>
           </div>
@@ -307,28 +311,28 @@ export default function Home() {
           <div className="absolute -bottom-24 right-1/2">
             <div className="*:overflow-visible! ">
               <SimpleParallax>
-                <Image src="/svg/star_1.svg" alt="" width={0} height={0} className="w-60 h-60"></Image>
+                <Image src="/svg/star_1.svg" alt="" width={0} height={0} className="size-40 lg:size-60"></Image>
               </SimpleParallax>
             </div>
           </div>          
         </div>
       </div>
 
-      <section ref={hero} id="inicio" className="relative w-full h-screen max-h-screen p-0! m-0! overflow-x-hidden">
+      <section ref={hero} id="inicio" className="relative w-full h-screen max-h-screen pt-24 lg:p-0 m-0! overflow-x-hidden">
 
         <div className="relative grid grid-cols-12 h-full w-full">
-          <div className="col-span-8 text-grey flex flex-wrap items-center">
-            <div className=" px-16 flex flex-wrap justify-center">
-                <h1 className="text-5xl text-center font-semibold h-fit w-full ">Software de apoyo para el estudio y seguimiento del TDO</h1>
+          <div className="col-span-12 lg:col-span-8 text-grey flex flex-wrap items-center">
+            <div className="px-4 lg:px-16 flex flex-wrap justify-center w-full">
+                <h1 className="text-3xl lg:text-5xl text-center font-semibold h-fit w-full ">Software de apoyo para el estudio y seguimiento del TDO</h1>
                 
-                <p className="mt-16 text-xl h-fit w-sm min-w-[500] text-center">Una herramienta tecnológica diseñada para fortalecer el análisis psicológico y la toma de decisiones clínicas.</p>
+                <p className="mt-8 lg:mt-16 text-xl h-fit w-sm lg:min-w-[500] text-center">Una herramienta tecnológica diseñada para fortalecer el análisis psicológico y la toma de decisiones clínicas.</p>
             </div>
           </div>
 
-          <div className="col-span-4 flex items-center overflow-hidden">
-            <div className="hover-3d">
+          <div className="col-span-12 lg:col-span-4 flex justify-center items-center overflow-hidden">
+            <div className="lg:hover-3d">
               <figure className=" rounded-2xl">
-                <Image src="/svg/heroImage.svg" alt="Imagen Hero" width={0} height={0} className="w-lg h-lg scale-125 -translate-x-1/12 "></Image>
+                <Image src="/svg/heroImage.svg" alt="Imagen Hero" width={0} height={0} className="w-lg h-lg lg:scale-125 -translate-x-1/12 "></Image>
               </figure>
               <div></div>
               <div></div>
@@ -345,15 +349,16 @@ export default function Home() {
       </section>
 
       <section id="tdo" className="relative z-1">
-        <div className="relative py-0 ">
-          <img src="/png/container_1.png" alt="" className="w-full"/>
+        <div className="relative py-0 lg:py-8 ">
+          <img src="/png/container_1.png" alt="" className="invisible lg:visible w-full h-full absolute top-0 left-0"/>
+          <img src="/png/container_1_3.png" alt="" className="lg:invisible w-full h-full absolute top-0 left-0"/>
+
           {/* <Image src="/png/container_1.png" alt="" width={0} height={0} className=" w-full"></Image> */}
-          <div className="grid grid-cols-12 absolute top-1/2 left-0 -translate-y-1/2 px-12">
-            <div className="col-span-4 relative flex justify-center items-center ">
-              <div className="hover-3d">
-                <figure className="bg-none! rounded-full relative flex justify-center items-center w-112 h-112">
-                  <Image src="/svg/angryKidBg.svg" alt="" width={0} height={0} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-100"></Image>
-                  <Image src="/svg/angryKid.svg" alt="" width={0} height={0} className="relative w-84 h-128"></Image>
+          <div className="py-24 lg:py-0 flex flex-wrap flex-col-reverse lg:grid grid-cols-12 px-8 relative">
+            <div className="px-2 lg:px-0 col-span-12 lg:col-span-4 relative flex justify-center items-center pt-15 w-full">
+              <div className="lg:hover-3d">
+                <figure className="bg-none! rounded-full relative flex justify-center items-center w-full">
+                  <img src="/png/angryKid.png" alt="" width={0} height={0} className="relative w-full lg:w-84"/>
                 </figure>
                 <div></div>
                 <div></div>
@@ -368,11 +373,11 @@ export default function Home() {
 
             </div>
 
-            <div className="col-span-8 flex items-center justify-center ">
-              <div className="px-12 grid gap-12 text-grey">
-                <h2 className="text-5xl font-semibold text-center opacity-90">¿Qué es el TDO?</h2>
+            <div className="col-span-12 lg:col-span-8 flex items-center justify-center ">
+              <div className="lg:px-12 grid gap-2 lg:gap-12 text-grey">
+                <h2 className="text-3xl lg:text-5xl font-semibold text-center opacity-90">¿Qué es el TDO?</h2>
 
-                <p className="text-center text-xl opacity/80">Es el Trastorno Desafiante de Oposición, teniendo un patrón recurrente o persistente de conducta negativa, desafiante o incluso hostil dirigida a figuras de autoridad.</p>
+                <p className="text-center text-lg lg:text-xl opacity/80">Es el Trastorno Desafiante de Oposición, teniendo un patrón recurrente o persistente de conducta negativa, desafiante o incluso hostil dirigida a figuras de autoridad.</p>
               </div>
             </div>
           </div>
@@ -409,22 +414,32 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="text-grey z-1 relative">
-        <article className="grid grid-cols-12">
-          <div className="col-span-6 flex items-center">
-            <div className="px-16 flex flex-wrap justify-end gap-8">
-              <h3 className="text-right font-bold text-4xl">Impacto del TDO en niños y adolescentes en Mexico</h3>
-
-              <p className="text-right text-xl w-100">En Mexico, el <b>TDO</b> esta presente en 1600 niños de cada 10 000. Una prevalencia del 16%</p>
+      <section className="mt-8 lg:mt-0 text-grey z-1 relative">
+        <article className="grid gap-6 lg:gap-0 grid-cols-12 relative">
+          <div className="absolute -bottom-1/12 right-1/4">
+            <div className="*:overflow-visible! *:w-full *:h-full">
+              <SimpleParallax >
+                <Image src="/svg/circlePink.svg" alt="" width={0} height={0} className="size-24 lg:size-44 rotate-15"></Image>        
+              </SimpleParallax>
             </div>
           </div>
 
-          <div className="col-span-6 relative flex justify-center items-center">
-            <div className="hover-3d">
-              <figure className="relative flex justify-center items-center w-112 h-112">
-                <Image src="/svg/greenCircle.svg" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-106 h-106"></Image>
-                <img src="/png/grafica1.png" alt="" width={0} height={0} className="relative w-100 h-100 rounded-full"/>
-                <Image src="/svg/dottedCircleGrey.svg" alt="" width={0} height={0} className="absolute w-112 h-112"></Image>
+          <div className="col-span-12 lg:col-span-6 flex items-center relative">
+            <div className="px-8 lg:px-16 w-full flex flex-wrap justify-end gap-8">
+              <h3 className="text-center lg:text-right font-bold text-3xl lg:text-4xl w-full">Impacto del TDO en niños y adolescentes en Mexico</h3>
+
+              <p className="text-center lg:text-right text-lg lg:text-xl lg:w-100">En Mexico, el <b>TDO</b> esta presente en 1600 niños de cada 10 000. Una prevalencia del 16%</p>
+            </div>
+          </div>
+
+          <div className="col-span-12 lg:col-span-6 relative flex justify-center items-center">
+            <div className="lg:hover-3d">
+              <figure className="relative flex justify-center items-center rounded-full border-dashed border-grey/30 border-8 lg:border-11 p-1">
+                {/* <img src="/png/greenCircleBorder.png" alt="" width={0} height={0} className="relative w-106 h-106"/> */}
+                {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
+                <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
+                  <div className="bg-white relative w-full h-full rounded-full"></div>           
+                </div>
               </figure>
               <div></div>
               <div></div>
@@ -438,14 +453,16 @@ export default function Home() {
           </div>
         </article>
 
-        <article className="grid grid-cols-12 mt-24">
+        <article className="flex flex-wrap flex-col-reverse lg:grid grid-cols-12 relative mt-6 lg:mt-0 gap-6 lg:gap-0">
           
-          <div className="col-span-6 flex justify-center items-center">
-            <div className="hover-3d">
-              <figure className="relative flex justify-center items-center w-112 h-112">
-                <Image src="/svg/greenCircle.svg" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-106 h-106"></Image>
-                <img src="/png/grafica2.png" alt="" width={0} height={0} className="relative w-100 h-100 rounded-full"/>
-                <Image src="/svg/dottedCircleGrey.svg" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-112 h-112"></Image>
+          <div className="col-span-12 lg:col-span-6 relative flex justify-center items-center w-full">
+            <div className="lg:hover-3d">
+              <figure className="relative flex justify-center items-center rounded-full border-dashed border-grey/30 border-8 lg:border-11 p-1">
+                {/* <img src="/png/greenCircleBorder.png" alt="" width={0} height={0} className="relative w-106 h-106"/> */}
+                {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
+                <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
+                  <div className="bg-white relative w-full h-full rounded-full"></div>           
+                </div>
               </figure>
               <div></div>
               <div></div>
@@ -456,13 +473,13 @@ export default function Home() {
               <div></div>
               <div></div>
             </div>
-          </div>          
+          </div>
           
-          <div className="col-span-6 flex items-center">
+          <div className="col-span-6 flex items-center relative w-full">
             <div className="px-16 flex flex-wrap justify-start gap-8">
-              <h3 className="text-left font-bold text-4xl">Edad vulnerable</h3>
+              <h3 className="text-center lg:text-left font-bold text-3xl lg:text-4xl w-full">Edad vulnerable</h3>
 
-              <p className="text-left text-xl w-100">
+              <p className="text-center lg:text-left text-lg lg:text-xl lg:w-100">
                 La etapa entre 5 y 9 años es crucial para el correcto 
                 diagnostico y tratamiento. No obstante, tambien
                 puede presentarse en otras edades.
@@ -473,7 +490,7 @@ export default function Home() {
         </article>        
       </section>
 
-      <div className="w-full h-2 relative mt-42">
+      <div className="w-full h-2 relative ">
         <div className="absolute -bottom-66 -left-36 rotate-90">
           <div className="*:overflow-visible! *:w-full *:h-full">
             <SimpleParallax >
@@ -484,58 +501,45 @@ export default function Home() {
         
         
 
-        <div className="absolute bottom-12 right-8">
+        <div className="absolute bottom-0 right-0">
           <div className="*:overflow-visible! *:w-full *:h-full">
             <SimpleParallax >
-              <Image src="/svg/starPink.svg" alt="" width={0} height={0} className="size-54"></Image>        
+              <Image src="/svg/starPink.svg" alt="" width={0} height={0} className="size-44 lg:size-54"></Image>        
             </SimpleParallax>
           </div>
-        </div>        
+        </div> 
       </div>
 
       <section id="tico" className="relative w-full z-1">
         
-        <img src="/png/container_2.png" alt="" className=" w-full h-auto"/>
+        <img src="/png/container_2.png" alt="" className="invisible lg:visible h-full w-full h-auto absolute top-1/2 -translate-y-1/2 left-0"/>
+        <img src="/png/container_2_2.png" alt="" className="lg:invisible h-full absolute top-1/2 -translate-y-1/2 left-0"/>
+
         {/* <Image src="/svg/container_2.svg" alt="" fill className="h-auto w-auto"></Image> */}
         
         
-        <article className="py-24 absolute top-1/2 -translate-y-1/2 left-0 w-full">
+        <article className="w-full py-24 relative">
           
-          <div className="grid inline-flex w-full items-center justify-center mb-8 absolute top-0">
-            <div className="w-4/12">
-              <img src="/png/line1.png" alt=""  className="w-full"/>
-            </div>
-
-            <div>
-              <img src="/png/rombo.png" alt="" />
-            </div>
-
-            <div className="w-4/12">
-              <img src="/png/line1.png" alt=""  className="w-full"/>
-            </div>
-
-          </div>
-      
-          <div className="grid inline-flex w-full items-center justify-center absolute -bottom-18">
-            <div className="w-4/12">
-              <img src="/png/line1.png" alt=""  className="w-full"/>
-            </div>
-
-            <div>
-              <img src="/png/rombo.png" alt="" />
-            </div>
-
-            <div className="w-4/12">
-              <img src="/png/line1.png" alt=""  className="w-full"/>
-            </div>
-
-          </div>
-
-          <img src="/png/tico_gis1.png" alt=""  className="absolute right-0 top-0 w-3/8 opacity-70"/>
+          <img src="/png/tico_gis1.png" alt=""  className="absolute right-0 top-1/12 w-3/8 opacity-70"/>
 
           <img src="/png/star1.png" alt=""  className="absolute left-1/8 bottom-3/8 w-3/8 opacity-70"/>
 
-          <img src="/png/triangle.png" alt=""  className="absolute -right-1/12 -bottom-1/12 w-3/8 opacity-70 rotate-135"/>
+          <img src="/png/triangle.png" alt=""  className="absolute -right-1/12 bottom-12 w-3/8 opacity-70 rotate-135"/>
+
+          <div className="grid inline-flex w-full items-center justify-center my-8">
+            <div className="w-4/12">
+              <img src="/png/line1.png" alt=""  className="w-full"/>
+            </div>
+
+            <div>
+              <img src="/png/rombo.png" alt="" />
+            </div>
+
+            <div className="w-4/12 ">
+              <img src="/png/line1.png" alt=""  className="w-full"/>
+            </div>
+
+          </div>
 
           <div className="py-0 relative">
 
@@ -550,7 +554,6 @@ export default function Home() {
 
                 <div className="relative w-full max-w-6xl overflow-hidden">
           
-                  {/* Galería */}
                   <div className="flex items-center justify-center gap-6 transition-all duration-500">
 
                     {images.map((src, index) => {
@@ -578,7 +581,6 @@ export default function Home() {
 
                   </div>
 
-                  {/* Botones */}
                   <button
                     onClick={prev}
                     className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white px-4 py-2 rounded-full"
@@ -615,9 +617,9 @@ export default function Home() {
 
           </div>
 
-          <div className="w-full flex justify-center py-10 mt-35 relative">
+          <div className="w-full flex justify-center py-10 mt-35 mb-30 relative">
             <div className="absolute bg-grey/30 blur-sm w-full h-full scale-y-135 bottom-1/2 translate-y-1/2"></div>
-            <div className="w-8/12 relative">
+            <div className="w-9/12 lg:w-7/12 relative">
               <img src="/png/sideBarLeft.png" alt=""  className=" z-1 h-full left-0 -translate-x-8/12 absolute scale-125 scale-y-145 "/>
 
               <img src="/png/sideBarRight.png" alt=""  className=" z-1 h-full right-0 translate-x-8/12 absolute  scale-125 scale-y-145"/>
@@ -635,14 +637,26 @@ export default function Home() {
                 <img ref={barBottom2} src="/png/boxBar.png" alt="" className="w-full absolute top-1/2 -translate-y-1/2 right-full"/>
               </div>
 
-
-
-
               <video ref={videoRef} className="w-full h-auto" controls>
                 <source src="./vid/Tico.mp4" type="video/mp4"></source>
                 Your browser does not support the video tag.
               </video>
             </div>
+          </div>
+
+          <div className="grid inline-flex w-full items-center justify-center my-8 rotate-180">
+            <div className="w-4/12">
+              <img src="/png/line1.png" alt=""  className="w-full"/>
+            </div>
+
+            <div>
+              <img src="/png/rombo.png" alt="" />
+            </div>
+
+            <div className="w-4/12">
+              <img src="/png/line1.png" alt=""  className="w-full"/>
+            </div>
+
           </div>
 
         </article>
@@ -668,24 +682,25 @@ export default function Home() {
         </div>    
       </div>
 
-      <section id="quienesSomos" className="text-grey relative z-1 mt-24">
+      <section id="quienesSomos" className="text-grey relative z-1 pt-6 pb-12">
         <h2 className=" text-5xl font-bold text-center mb-16">¿Quiénes somos?</h2>
 
         <article className="grid grid-cols-12 *:flex *:items-start *:justify-center px-12">
 
           <div className="col-span-7 px-30  ">
-            <div className="z-1 grid grid-rows-12 grid-cols-1 h-full">
+            <div className="z-1 grid  grid-cols-1 h-full">
                 <div className="row-span-5 items-start">
                   <p className="text-center text-xl">Somos una iniciativa que une tecnología y psicología para atender el Trastorno Desafiante por Oposición.
+                  Diseñamos un videojuego terapéutico capaz de medir y registrar métricas de conducta en tiempo real mientras el paciente interactúa con la plataforma.
                   </p>
                 </div>
 
-                <div className="row-span-1"></div>
-
-                <div className="row-span-6 items-end flex">
+                <div className="row-span-6 items-start flex">
                   <p className="text-center text-xl">
                     Diseñamos un videojuego terapéutico capaz de medir y registrar métricas de conducta en tiempo real mientras el paciente interactúa con la plataforma.
                   </p>
+
+                  
                 </div>
             </div>
           </div>
@@ -707,7 +722,7 @@ export default function Home() {
           </div>
         </article>
 
-        <article className="relative grid grid-cols-12 *:flex *:justify-center px-12 mt-24">
+        <article className="relative grid grid-cols-12 *:flex *:justify-center px-12 mt-12">
 
           <div className="absolute -top-3/4 right-1/4">
             <div className="*:overflow-visible! *:w-full *:h-full">
@@ -763,11 +778,11 @@ export default function Home() {
         </div>            
       </div>
 
-      <section id="contactanos" className="relative w-full z-1 mt-28">
-        <img src="/svg/container_3.svg" alt="" className="w-full h-auto shadow-xl"/>
-        <img src="/svg/container_3.svg" alt="" className="w-full h-auto shadow-xl absolute top-0 left-0 rotate-180"/>
+      <section id="contactanos" className="relative w-full z-1">
+        {/* <img src="/svg/container_3.svg" alt="" className="w-full h-auto shadow-xl"/> */}
+        <img src="/svg/container_3.svg" alt="" className="w-full h-full bg-yellow absolute top-0 left-0 rotate-180"/>
 
-        <article className="absolute top-0 left-0 w-full h-full flex items-center text-grey">
+        <article className="w-full h-full flex items-center text-grey relative py-10">
           <div className="align-middle items-center grid grid-cols-12 w-full">
             <div className="col-span-5 flex justify-center pr-12 items-center">
               <div className="flex flex-wrap justify-end items-center">
@@ -775,7 +790,9 @@ export default function Home() {
                   <h2 className="font-bold text-5xl text-right w-full">Alianzas que transforman</h2>
                 </div>
                 <p className="mt-12 w-6/8 text-right text-xl">
-                  Buscamos conectar con mentes y organizaciones que compartan nuestro deseo de mejorar la salud mental infantil. Si nuestra visión resuena contigo, exploremos cómo podemos colaborar.
+                  Buscamos conectar con mentes y organizaciones que compartan nuestro deseo de mejorar la salud mental infantil. 
+                  <br /> <br />
+                  Si nuestra visión resuena contigo, exploremos cómo podemos colaborar.
                 </p>
               </div>
             </div>
@@ -790,7 +807,7 @@ export default function Home() {
                 <div className="size-6 bg-yellow rounded-full absolute right-8 translate-x-1/2 top-7/12"></div>
                 <div className="size-6 bg-yellow rounded-full absolute right-8 translate-x-1/2 top-10/12"></div>
               
-                <form action="" className="z-1 relative *:w-full flex flex-wrap items-center gap-8 w-full text-lg">
+                <form action="" className="z-1 relative lg:px-12 *:w-full flex flex-wrap items-center gap-8 w-full text-lg">
                   
                   <h3 className="text-4xl font-bold text-center w-full h-fit relative">Formulario</h3>
 
@@ -802,6 +819,9 @@ export default function Home() {
 
                   <textarea name="" id="" className="bg-white border-aqua border-2 p-2 rounded-md min-h-32" placeholder="Mensaje:"></textarea>
 
+                  <div className="flex justify-center">
+                    <input type="submit" className="btn bg-aqua border border-none text-grey/80 px-8" />
+                  </div>
                 </form>
               </div>
             </div>
@@ -836,14 +856,15 @@ export default function Home() {
         </div>                
       </div>
 
-      <footer className="relative w-full min-h-24 mt-12 bg-teal inline-flex items-center justify-between px-4">
+      <footer className="relative w-full min-h-24 mt-12 bg-teal grid justify-center gap-4 lg:inline-flex items-center lg:justify-between py-4 px-4">
               <div className="inline-flex items-center gap-6">
                 <img src="/svg/ticoHead.svg" alt="" />
                 <p>tico.support@gmail.com</p>
               </div>
               
               <div>
-                <ul className="h-full flex gap-6 items-center">
+                <ul className="h-full grid lg:grid-cols-2 gap-2 items-center">
+                  <li className="col-span-2 w-full text-center font-semibold">Rutas</li>
                   <li>
                     <a href="#inicio">Inicio</a>
                   </li>
@@ -865,7 +886,7 @@ export default function Home() {
               </small>
       </footer>
 
-      <div className="fixed right-0 bottom-1 z-2">
+      <div className="fixed right-4 bottom-6 z-2">
         <img ref={tico} src="/png/tico_good.png" alt="" />
       </div>
 
