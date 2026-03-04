@@ -20,3 +20,39 @@ h1, h2, h3 {
   --color-teal: #648688;
   --color-yellow: #F0E6BE;
 }
+
+
+@plugin "daisyui/theme" {
+  name: "tico";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #F8F9FA;
+  --color-base-200: oklch(96% 0.001 286.375);
+  --color-base-300: oklch(92% 0.004 286.32);
+  --color-base-content: oklch(21% 0.006 285.885);
+  --color-primary: #6FBBB9;
+  --color-primary-content: #F8F9FA;
+  --color-secondary: #6FBBB9;
+  --color-secondary-content: #F8F9FA;
+  --color-accent: oklch(70% 0.14 182.503);
+  --color-accent-content: oklch(98% 0.014 180.72);
+  --color-neutral: oklch(44% 0.017 285.786);
+  --color-neutral-content: oklch(98% 0 0);
+  --color-info: oklch(78% 0.154 211.53);
+  --color-info-content: oklch(30% 0.056 229.695);
+  --color-success: oklch(77% 0.152 181.912);
+  --color-success-content: oklch(27% 0.046 192.524);
+  --color-warning: oklch(82% 0.189 84.429);
+  --color-warning-content: oklch(27% 0.077 45.635);
+  --color-error: oklch(71% 0.202 349.761);
+  --color-error-content: oklch(28% 0.109 3.907);
+  --radius-selector: 0rem;
+  --radius-field: 1rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}

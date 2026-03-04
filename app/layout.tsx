@@ -21,7 +21,6 @@ export const metadata: Metadata = {
   title: "Tico",
   icons: "/svg/ticoHead.svg",
   description: "Tico",
-  viewport: "",
 };
 
 export default function RootLayout({
@@ -30,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-white">
+    <html lang="en" className="bg-white!" data-theme="tico">
       <body
         className={`${poppins.variable} ${leagueSpartan.variable} antialiased `}
       >
