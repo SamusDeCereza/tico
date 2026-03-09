@@ -6,6 +6,29 @@
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+  gsap.registerPlugin(ScrollTrigger);
+
+  import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  } from "chart.js";
+
+  import { Bar } from "react-chartjs-2";
+
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
   export default function Home() {
     const navRef = useRef<HTMLDivElement>(null);
     const hero = useRef<HTMLDivElement>(null);
@@ -21,6 +44,7 @@
     const tico = useRef<HTMLImageElement>(null);
 
     const [active, setActive] = useState(2);
+    const [loading, setLoading] = useState(true);
     
     const images = [
       "galery1.png",
@@ -45,7 +69,7 @@
     const [isPaused, setIsPaused] = useState(false);
 
     useEffect(() => {
-    
+      document.body.style.overflow = "hidden";
 
       gsap.registerPlugin(ScrollTrigger);
 
@@ -118,28 +142,6 @@
       
 
       if (!navRef.current || !hero.current) return;
-
-      // ScrollTrigger.create({
-      //   trigger: hero.current,
-      //   start: "bottom top",
-
-      //   onEnter: () => {
-      //     navRef.current?.classList.add(
-      //       "bg-grey/70",
-      //       "backdrop-blur-md",
-      //       "shadow-lg"
-      //     );
-          
-      //   },
-
-      //   onLeaveBack: () => {
-      //     navRef.current?.classList.remove(
-      //       "bg-grey/70",
-      //       "backdrop-blur-md",
-      //       "shadow-lg"
-      //     );
-      //   }
-      //   });
 
         const sections = document.querySelectorAll("section");
 
@@ -239,9 +241,137 @@
           );
         }, 4000);
 
+
         return () => clearInterval(interval);
     }, [isPaused]);
 
+    const loaderRef = useRef<HTMLDivElement>(null);
+    const logoRef = useRef<HTMLDivElement>(null);
+    
+    useEffect(() => {
+
+      window.scrollTo(0, 0);
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto"
+      });
+
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+
+      if (!loaderRef.current) return;
+
+      const ctx = gsap.context(() => {
+
+        const tl = gsap.timeline({
+          delay: 1,
+        });
+
+        tl.to(".loader-bg", {
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.15
+        })
+
+        .to("#logo", {
+          rotationY: "+=720",
+          duration: 0.8,
+          ease: "ease.in.out"
+        }, "0.15")
+
+        .to(".loader-bg", {
+          y: "-100%",
+          duration: 0.8,
+          ease: "power3.in",
+        })
+
+        .to("#logo", {
+          top: "-50%",
+          duration: 0.8,
+          ease: "power3.in",          
+          onStart: () => {
+            window.scrollTo(0, 0);
+
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "auto"
+            });
+          },
+          onComplete: () => {
+            setLoading(false)
+            document.body.style.overflow = "auto";
+          }
+
+        }, "<")
+
+
+
+      }, loaderRef);
+
+      return () => ctx.revert();
+
+    }, []);
+
+    useEffect(() => {
+
+      gsap.utils.toArray<HTMLElement>(".reveal").forEach((element) => {
+
+        gsap.from(element, {
+          y: 80,
+          opacity: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: element,
+            start: "top 85%",
+          }
+        });
+
+      });
+
+      gsap.utils.toArray<HTMLElement>(".reveal-3d").forEach((element) => {
+
+        gsap.from(element, {
+          y: 80,
+          opacity: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: element,
+            start: "top 85%",
+          },
+          onComplete: function () {
+            this.targets()[0].classList.add("lg:hover-3d");
+          }
+        });
+
+      });
+
+    }, []);
+      
+    const data = {
+      labels: ["Enero", "Febrero", "Marzo", "Abril"],
+      datasets: [
+        {
+          label: "Ventas",
+          data: [120, 190, 300, 250],
+        }
+      ]
+    };
+
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top" as const
+        }
+      }
+    };
+
+    const [open, setOpen] = useState(false);
 
     return (
 
@@ -379,14 +509,14 @@
         </section>
 
         <section id="tdo" className="relative z-1">
-          <div className="relative py-0 lg:py-8 ">
+          <div className=" relative py-0 lg:py-8 ">
             <img src="/png/container_1.png" alt="" className="invisible lg:visible w-full h-full absolute top-0 left-0"/>
             <img src="/png/container_1_3.png" alt="" className="lg:invisible w-full h-full absolute top-0 left-0"/>
 
             {/* <Image src="/png/container_1.png" alt="" width={0} height={0} className=" w-full"></Image> */}
-            <div className="py-24 lg:py-0 flex flex-wrap flex-col-reverse lg:grid grid-cols-12 px-8 relative">
-              <div className="px-2 lg:px-0 col-span-12 lg:col-span-4 relative flex justify-center items-center pt-15 w-full">
-                <div className="lg:hover-3d">
+            <div className=" py-18 lg:py-0 flex flex-wrap flex-col-reverse lg:grid grid-cols-12 px-8 relative">
+              <div className="px-2 lg:px-0 col-span-12 lg:col-span-4 relative flex justify-center items-center pt-8 lg:pt-15 w-full">
+                <div className="reveal-3d">
                   <figure className="bg-none! rounded-full relative flex justify-center items-center w-full">
                     <img src="/png/angryKid.png" alt="" width={0} height={0} className="relative w-full lg:w-84"/>
                   </figure>
@@ -405,9 +535,9 @@
 
               <div className="col-span-12 lg:col-span-8 flex items-center justify-center ">
                 <div className="lg:px-12 grid gap-2 lg:gap-12 text-grey">
-                  <h2 className="text-3xl lg:text-5xl font-semibold text-center opacity-90">¿Qué es el TDO?</h2>
+                  <h2 className="reveal text-3xl lg:text-5xl font-semibold text-center opacity-90">¿Qué es el TDO?</h2>
 
-                  <p className="text-center text-lg lg:text-xl opacity/80">Es el Trastorno Desafiante de Oposición, teniendo un patrón recurrente o persistente de conducta negativa, desafiante o incluso hostil dirigida a figuras de autoridad.</p>
+                  <p className="reveal text-center text-lg lg:text-xl opacity/80">Es el Trastorno Desafiante de Oposición, teniendo un patrón recurrente o persistente de conducta negativa, desafiante o incluso hostil dirigida a figuras de autoridad.</p>
                 </div>
               </div>
             </div>
@@ -456,19 +586,21 @@
 
             <div className="col-span-12 lg:col-span-6 flex items-center relative">
               <div className="px-8 lg:px-16 w-full flex flex-wrap justify-end gap-8">
-                <h3 className="text-center lg:text-right font-bold text-3xl lg:text-4xl w-full">Impacto del TDO en niños y adolescentes en Mexico</h3>
+                <h3 className="reveal text-center lg:text-right font-bold text-3xl lg:text-4xl w-full">Impacto del TDO en niños y adolescentes en Mexico</h3>
 
-                <p className="text-center lg:text-right text-lg lg:text-xl lg:w-100">En Mexico, el <b>TDO</b> esta presente en 1600 niños de cada 10 000. Una prevalencia del 16%</p>
+                <p className="reveal text-center lg:text-right text-lg lg:text-xl lg:w-100">En Mexico, el <b>TDO</b> esta presente en 1600 niños de cada 10 000. Una prevalencia del 16%</p>
               </div>
             </div>
 
             <div className="col-span-12 lg:col-span-6 relative flex justify-center items-center">
-              <div className="lg:hover-3d">
+              <div className="reveal-3d">
                 <figure className="relative flex justify-center items-center rounded-full border-dashed border-grey/30 border-8 lg:border-11 p-1">
                   {/* <img src="/png/greenCircleBorder.png" alt="" width={0} height={0} className="relative w-106 h-106"/> */}
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
-                    <div className="bg-white relative w-full h-full rounded-full"></div>           
+                    <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
+                      <Bar data={data} options={options} />
+                    </div>           
                   </div>
                 </figure>
                 <div></div>
@@ -486,12 +618,14 @@
           <article className="flex flex-wrap flex-col-reverse lg:grid grid-cols-12 relative mt-6 lg:mt-0 gap-6 lg:gap-0">
             
             <div className="col-span-12 lg:col-span-6 relative flex justify-center items-center w-full">
-              <div className="lg:hover-3d">
+              <div className="reveal-3d">
                 <figure className="relative flex justify-center items-center rounded-full border-dashed border-grey/30 border-8 lg:border-11 p-1">
                   {/* <img src="/png/greenCircleBorder.png" alt="" width={0} height={0} className="relative w-106 h-106"/> */}
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
-                    <div className="bg-white relative w-full h-full rounded-full"></div>           
+                    <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
+                        <Bar data={data} options={options} />
+                    </div>           
                   </div>
                 </figure>
                 <div></div>
@@ -506,10 +640,10 @@
             </div>
             
             <div className="col-span-6 flex items-center relative w-full">
-              <div className="px-16 flex flex-wrap justify-start gap-8">
-                <h3 className="text-center lg:text-left font-bold text-3xl lg:text-4xl w-full">Edad vulnerable</h3>
+              <div className="px-8 lg:px-16 flex flex-wrap justify-start gap-8">
+                <h3 className="reveal text-center lg:text-left font-bold text-3xl lg:text-4xl w-full">Edad vulnerable</h3>
 
-                <p className="text-center lg:text-left text-lg lg:text-xl lg:w-100">
+                <p className="reveal text-center lg:text-left text-lg lg:text-xl lg:w-100">
                   La etapa entre 5 y 9 años es crucial para el correcto 
                   diagnostico y tratamiento. No obstante, tambien
                   puede presentarse en otras edades.
@@ -578,13 +712,13 @@
               </div>
 
               <div className="relative grid gap-0 w-full">
-                <h2 className="text-3xl lg:text-5xl font-bold text-center text-grey mt-10 opacity-95">Conoce a TICO</h2>
+                <h2 className="reveal text-3xl lg:text-5xl font-bold text-center text-grey mt-10 opacity-95">Conoce a TICO</h2>
 
-                <div className="w-full py-10 flex flex-col items-center">
+                <div className="w-full pt-4 pb-10 lg:py-10! flex flex-col items-center">
 
                   <div className="relative w-full max-w-6xl overflow-hidden">
             
-                    <div className="w-full relative flex lg:hidden items-center justify-center h-[70vh]">
+                    <div className="reveal w-full relative flex lg:hidden items-center justify-center h-[60vh]">
                       {images.map((src, index) => {
                         const offset = index - active;
                         const absOffset = Math.abs(offset);
@@ -604,7 +738,7 @@
                           >
                             <img
                               src={"/png/" + src}
-                              className="w-11/12 h-[70vh] object-cover rounded-2xl shadow-xl cursor-pointer"
+                              className="w-11/12 h-[60vh] object-cover rounded-2xl shadow-xl cursor-pointer"
                               onClick={() => {
                                 setActive(index);
                                 setIsPaused(true);
@@ -615,7 +749,7 @@
                       })}
                     </div>
 
-                    <div className="hidden lg:flex items-center justify-center gap-6 transition-all duration-500">
+                    <div className="reveal hidden lg:flex items-center justify-center gap-6 transition-all duration-500">
 
                       {images.map((src, index) => {
                         const isActive = index === active;
@@ -644,16 +778,16 @@
 
                     <button
                       onClick={prev}
-                      className="z-1 absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white px-4 py-2 rounded-full"
+                      className="z-1 absolute left-2 top-1/2 -translate-y-1/2 bg-grey/50 text-white px-3 py-4 rounded-full text-xl"
                     >
-                      ←
+                      ◀
                     </button>
 
                     <button
                       onClick={next}
-                      className="z-1 absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 text-white px-4 py-2 rounded-full"
+                      className="z-1 absolute right-2 top-1/2 -translate-y-1/2 bg-grey/50 text-white px-3 py-4 rounded-full text-xl"
                     >
-                      →
+                      ▶
                     </button>
                   </div>
 
@@ -663,7 +797,7 @@
                         key={index}
                         onClick={() => setActive(index)}
                         className={`
-                          w-6 h-6 rounded-full transition-all duration-300
+                          size-4 lg:size-6 rounded-full transition-all duration-300
                           ${index === active
                             ? "bg-white scale-125"
                             : "bg-white/50"}
@@ -680,10 +814,10 @@
 
             <div className="w-full flex justify-center py-10 mt-20 mb-12 lg:mt-35 lg:mb-30 relative">
               <div className="absolute bg-grey/30 blur-sm w-full h-full scale-y-135 bottom-1/2 translate-y-1/2"></div>
-              <div className="w-9/12 lg:w-7/12 relative">
-                <img src="/png/sideBarLeft.png" alt=""  className=" z-1 h-full left-0 -translate-x-8/12 absolute scale-125 scale-y-145 "/>
+              <div className="reveal w-9/12 lg:w-7/12 relative">
+                <img src="/png/sideBarLeft.png" alt=""  className=" z-1 h-full left-0 -translate-x-full absolute scale-y-145 "/>
 
-                <img src="/png/sideBarRight.png" alt=""  className=" z-1 h-full right-0 translate-x-8/12 absolute  scale-125 scale-y-145"/>
+                <img src="/png/sideBarLeft.png" alt=""  className=" z-1 h-full right-0 translate-x-full absolute scale-y-145"/>
 
                 <div className="z-1 -translate-y-full absolute overflow-hidden scale-125">
                   <img src="/png/greyBarNoShadow.png" alt=""  className="shadow-xl w-full h-auto"/>
@@ -744,21 +878,21 @@
         </div>
 
         <section id="quienesSomos" className="text-grey relative z-1 pt-6 pb-12 w-full px-8 lg:px-0">
-          <h2 className="text-3xl lg:text-5xl font-bold text-center mb-4 lg:mb-16">¿Quiénes somos?</h2>
+          <h2 className="reveal text-3xl lg:text-5xl font-bold text-center mb-4 lg:mb-16">¿Quiénes somos?</h2>
 
           <article className="grid grid-cols-12 *:flex *:items-start *:justify-center lg:px-12 gap-6 lg:gap-0">
 
             <div className="col-span-12 lg:col-span-7 lg:px-30 w-full">
               <div className="z-1 flex items-center w-full h-full">
-                  <p className="text-center text-lg lg:text-xl w-full h-fit">Somos una iniciativa que une tecnología y psicología para atender el Trastorno Desafiante por Oposición.
+                  <p className="reveal text-center text-lg lg:text-xl w-full h-fit">Somos una iniciativa que une tecnología y psicología para atender el Trastorno Desafiante por Oposición.
                     Diseñamos un videojuego terapéutico capaz de medir y registrar métricas de conducta en tiempo real mientras el paciente interactúa con la plataforma.
                   </p>
               </div>
             </div>
 
             <div className="z-1 col-span-12 lg:col-span-5">
-              <div className="lg:hover-3d">
-                <figure className="border-grey/30 border-8 p-4 border-dashed">
+              <div className="reveal-3d">
+                <figure className="border-grey/30 border-8 p-1 lg:p-4 border-dashed">
                   <img src="/png/ab1.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2"/>
                 </figure>
                 <div></div>
@@ -784,8 +918,8 @@
             </div>    
 
             <div className="z-1 relative col-span-12 lg:col-span-5">
-              <div className="lg:hover-3d">
-                <figure className="border-grey/30 border-8 p-4 border-dashed">
+              <div className="reveal-3d">
+                <figure className="border-grey/30 border-8 p-1 lg:p-4 border-dashed">
                   <img src="/png/ab2.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2"/>
                 </figure>
                 <div></div>
@@ -801,7 +935,7 @@
             </div>
 
             <div className="z-1 relative col-span-12 lg:col-span-7 lg:px-30 text-grey flex items-center! h-full">
-              <p className="text-lg lg:text-xl text-center">
+              <p className="reveal text-lg lg:text-xl text-center">
                 Buscamos proporcionar información clave al especialista para su análisis. Al recibir estos datos, el terapeuta puede evaluar los resultados y detectar con precisión los puntos fuertes del niño, facilitando un tratamiento basado en evidencia concreta.
               </p>
             </div>
@@ -838,9 +972,9 @@
               <div className="col-span-12 lg:col-span-5 flex justify-center lg:pr-12 items-center">
                 <div className="w-full flex flex-wrap justify-center lg:justify-end items-center ">
                   <div className="lg:w-6/8">
-                    <h2 className="font-bold text-3xl lg:text-5xl text-center lg:text-right w-full">Alianzas que transforman</h2>
+                    <h2 className="reveal font-bold text-3xl lg:text-5xl text-center lg:text-right w-full">Alianzas que transforman</h2>
                   </div>
-                  <p className="my-4 lg:mt-12 lg:w-6/8 text-center lg:text-right text-lg lg:text-xl">
+                  <p className="reveal my-4 lg:mt-12 lg:w-6/8 text-center lg:text-right text-lg lg:text-xl">
                     Buscamos conectar con mentes y organizaciones que compartan nuestro deseo de mejorar la salud mental infantil. 
                     <br /> <br />
                     Si nuestra visión resuena contigo, exploremos cómo podemos colaborar.
@@ -848,7 +982,7 @@
                 </div>
               </div>
 
-              <div className="col-span-12 lg:col-span-7  flex justify-center">
+              <div className="reveal col-span-12 lg:col-span-7  flex justify-center">
                 <div className="bg-white shadow-lg overflow-hidden relative rounded-l-xl w-full max-w-2xl h-full lg:p-6 flex flex-wrap gap-8 lg:pr-22">
                   {/* <div className="w-full border-2 border-red-400/30 absolute top-[4rem] left-0"></div> */}
                   <img src="jpg/notebook.jpg" alt="" className="opacity-40 absolute left-0 top-0 h-full lg:h-auto"/>
@@ -937,11 +1071,75 @@
                 </small>
         </footer>
 
-        <div className="fixed right-0 lg:right-4 bottom-2 lg:bottom-6 z-2">
-          <img ref={tico} src="/png/tico_good.png" alt="" className="w-24 lg:w-48"/>
+        <div className="fixed right-0 lg:right-4 bottom-2 lg:bottom-6 z-2 inline-flex flex-row-reverse items-end w-full">
+          <img ref={tico} src="/png/tico_good.png" alt="" className="w-24 lg:w-48 
+          hover:bg-[radial-gradient(circle_400px_at_center,rgba(255,255,255,0.2),transparent)] p-6" onClick={() => setOpen(true)}/>
+          
+          {open && (
+            <div className="relative w-64 bg-white shadow-xl rounded-xl p-4 border">
+
+              <p className="text-gray-700 mb-3">
+                Este es un texto dentro de la burbuja.
+              </p>
+
+              <button
+                onClick={() => setOpen(false)}
+                className="text-sm px-3 py-1 bg-red-500 text-white rounded"
+              >
+                Cerrar
+              </button>
+
+            </div>
+          )}
         </div>
 
+        {loading && (
+          <div
+            ref={loaderRef}
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden perspective-[1000px] *:overflow-hidden"
+          >
+            <div className="loader-bg bg-teal absolute inset-0">
+              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+
+              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+
+              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+            </div>
+            <div className="loader-bg bg-yellow absolute inset-0 translate-y-full">
+              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+
+              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+
+              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+            </div>
+            <div className="loader-bg bg-pink absolute inset-0 translate-y-full">
+              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+
+              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+
+              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+            </div>
+            <div className="loader-bg bg-green absolute inset-0 translate-y-full">
+              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+
+              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+
+              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+            </div>
+            <div className="loader-bg bg-grey/05 absolute inset-0 translate-y-full">
+            </div>
+
+            <div id="logo" ref={logoRef} className="flex items-center gap-2 lg:gap-6 z-10 absolute top-1/2 left-1/2 -translate-1/2">
+              <img src="/svg/ticoHead.svg" className="size-20 lg:size-28" />
+              <p className="text-3xl lg:text-5xl font-bold text-grey">TICO</p>
+            </div>
+
+
+          </div>
+        )}
       </main>
+
+      
 
     );
   }

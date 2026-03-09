@@ -9,10 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "daisyui": "^5.5.18",
     "gsap": "^3.14.2",
     "next": "16.1.6",
     "react": "19.2.3",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "19.2.3",
     "simple-parallax-js": "^6.3.3"
   },
