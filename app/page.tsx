@@ -373,6 +373,105 @@
 
     const [open, setOpen] = useState(false);
 
+    const textRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+
+      const sections = document.querySelectorAll("section");
+
+      sections.forEach((section) => {
+
+        const title = section.getAttribute("id");
+        const titles = {
+          "inicio": "Inicio",
+          "servicios": "Nuestros servicios",
+          "contacto": "Contáctanos"
+        };
+
+        if(!title)
+          return;
+
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top center",
+          end: "bottom center",
+          onEnter: () => changeText(title),
+          onEnterBack: () => changeText(title)
+        });
+
+      });
+
+    }, []);
+
+    const typingRef = useRef<NodeJS.Timeout | null>(null);
+    const eraseRef = useRef<NodeJS.Timeout | null>(null);
+
+    const clearAnimations = () => {
+      if (typingRef.current) {
+        clearInterval(typingRef.current);
+        typingRef.current = null;
+      }
+
+      if (eraseRef.current) {
+        clearInterval(eraseRef.current);
+        eraseRef.current = null;
+      }
+    };
+
+    const changeText = (newText: string) => {
+
+      clearAnimations(); // 🔴 detener animaciones anteriores
+      gsap.killTweensOf(textRef.current);
+
+      if (!textRef.current) return;
+
+      textRef.current.textContent = ""; // 🔴 borrar texto inmediatamente
+
+      typeText(newText);
+    };
+
+    const typeText = (text: string) => {
+      if (!textRef.current) return;
+
+      let i = 0;
+      textRef.current.textContent = "";
+
+      typingRef.current = setInterval(() => {
+        if (!textRef.current) return;
+
+        textRef.current.textContent += text[i];
+        i++;
+
+        if (i >= text.length && typingRef.current) {
+          clearInterval(typingRef.current);
+        }
+      }, 40);
+    };
+
+    const boxRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+
+      if (!boxRef.current) return;
+
+      if (open) {
+        gsap.to(boxRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.2,
+          ease: "power2.out"
+        });
+      } else {
+        gsap.to(boxRef.current, {
+          opacity: 0,
+          y: 20,
+          duration: 0.2,
+          ease: "power2.in"
+        });
+      }
+
+    }, [open]);
+
     return (
 
       <main className="w-full h-full max-w-screen! bg-white! overflow-hidden relative">
@@ -1041,7 +1140,7 @@
           </div>                
         </div>
 
-        <footer className="relative w-full min-h-24 mt-12 bg-teal grid justify-center gap-4 lg:inline-flex items-center lg:justify-between py-4 px-4">
+        <footer className="relative w-full min-h-24 mt-12 inset-shadow-sm  backdrop-blur-md shadow-md bg-grey/15 grid justify-center gap-4 lg:inline-flex items-center lg:justify-between py-4 px-4">
                 <div className="inline-flex items-center gap-6">
                   <img src="/svg/ticoHead.svg" alt="" />
                   <p>tico.support@gmail.com</p>
@@ -1071,26 +1170,47 @@
                 </small>
         </footer>
 
-        <div className="fixed right-0 lg:right-4 bottom-2 lg:bottom-6 z-2 inline-flex flex-row-reverse items-end w-full">
-          <img ref={tico} src="/png/tico_good.png" alt="" className="w-24 lg:w-48 
-          hover:bg-[radial-gradient(circle_400px_at_center,rgba(255,255,255,0.2),transparent)] p-6" onClick={() => setOpen(true)}/>
-          
-          {open && (
-            <div className="relative w-64 bg-white shadow-xl rounded-xl p-4 border">
+        <div className="fixed left-0 lg:left-0 bottom-0 lg:bottom-4 z-2 inline-flex  items-end">
 
-              <p className="text-gray-700 mb-3">
-                Este es un texto dentro de la burbuja.
-              </p>
+          <div className="relative -left-4 rounded-2xl px-6 pt-6 ">
+            <img
+              ref={tico}
+              src="/png/tico_good.png"
+              alt=""
+              className="peer relative z-10 w-25 min-w-25 lg:w-38 max-h-28 lg:max-h-40 cursor-pointer
+              transition-rotate duration-300 hover:-rotate-15
+              hover:opacity-85 rotate-y-180
+              "
+              onClick={() => setOpen(!open)}
+            />
 
-              <button
-                onClick={() => setOpen(false)}
-                className="text-sm px-3 py-1 bg-red-500 text-white rounded"
-              >
-                Cerrar
-              </button>
+            <div className="w-full h-full scale-x-110 scale-y-200 
+              absolute -left-1 top-14
+              opacity-0
+              peer-hover:opacity-60
+              transition-opacity 
+              transition-rotate peer-hover:-rotate-5
+              duration-300
+              radial-gradient
+            "
+            ></div>
+          </div>
 
-            </div>
-          )}
+          <div ref={boxRef} className={`duration-300 transition-all relative w-64 bg-none rounded-xl -left-12 `}>
+            <img src="/png/dialogo.png" alt="" className="absolute w-full h-full bottom-1/2 right-1/2 translate-1/2"/>
+
+            <p ref={textRef} className="p-10 text-white mb-3 tracking-widest mix-blend-difference relative">
+              Hola
+            </p>
+
+            {/* <button
+              onClick={() => setOpen(false)}
+              className="text-sm px-3 py-1 bg-red-500 text-white rounded"
+            >
+              Cerrar
+            </button> */}
+
+          </div>
         </div>
 
         {loading && (

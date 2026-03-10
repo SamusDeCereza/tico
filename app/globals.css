@@ -57,3 +57,7 @@ h1, h2, h3 {
   --depth: 1;
   --noise: 0;
 }
+
+.radial-gradient{
+  background: radial-gradient(circle at center,var(--color-aqua) 40%,transparent 60%);
+}
