@@ -5,6 +5,7 @@
   import { useEffect, useRef, useState } from "react";
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import LoadingScreen from "./LoadingScreen";
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -15,7 +16,8 @@
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Colors
   } from "chart.js";
 
   import { Bar } from "react-chartjs-2";
@@ -26,7 +28,8 @@
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Colors
   );
 
   export default function Home() {
@@ -69,7 +72,7 @@
     const [isPaused, setIsPaused] = useState(false);
 
     useEffect(() => {
-      document.body.style.overflow = "hidden";
+      // document.body.style.overflow = "hidden";
 
       gsap.registerPlugin(ScrollTrigger);
 
@@ -190,7 +193,7 @@
 
             switch (id) {
               case "inicio":
-                tico.current?.setAttribute("src", route + "tico_good" + type);
+                tico.current?.setAttribute("src", route + "tico_sitting_right" + type);
                 break;
                 
               case "tdo":
@@ -198,7 +201,7 @@
                 break;
 
               case "tico":
-                tico.current?.setAttribute("src", route + "tico_sitting" + type);
+                tico.current?.setAttribute("src", route + "tico_looking" + type);
                 break;
 
               case "quienesSomos":
@@ -352,22 +355,49 @@
 
     }, []);
       
-    const data = {
-      labels: ["Enero", "Febrero", "Marzo", "Abril"],
+    const data1 = {
+      labels: [
+        ["Prevalencia", "mínima 2%"], 
+        ["Prevalencia", "máxima 16%"], 
+        ["Población", "en riesgo 20%"]
+      ],
       datasets: [
         {
-          label: "Ventas",
-          data: [120, 190, 300, 250],
+          data: [20, 1600, 2000],
         }
       ]
     };
 
-    const options = {
+
+    const options1 = {
+      type: 'bar',
+      maintainAspectRatio: false,
+      aspectRatio: 1,
       responsive: true,
+      options: {
+        plugins: {
+          customCanvasBackgroundColor: {
+            color: 'lightGreen',
+          }
+        }
+      },
+      scales:{
+        y: {
+          ticks: {
+            stepSize: 2000
+          },
+        },
+        x: {
+          grid:{
+            display: false
+          }
+        }
+      },
       plugins: {
         legend: {
+          display: false,
           position: "top" as const
-        }
+        },
       }
     };
 
@@ -375,18 +405,93 @@
 
     const textRef = useRef<HTMLDivElement>(null);
 
+    let indices = [0, 0, 0, 0, 0];
+
+    const dialogos = [
+      [
+        "¡Hola!, soy Tico, bienvenido, estoy aquí para acompañarte mientras exploras la página.",
+        "Puedes empezar aquí y bajar poco a poco, hay cosas interesantes más adelante.",
+        "Aquí empieza algo genial.", 
+      ],
+      [
+        "Esta sección te ayudará a entender mejor el problema que abordamos.", 
+        "Entender el contexto es el primer paso para generar soluciones.", 
+        "Tómate un momento, esta información es clave para todo lo demás."
+      ],
+      [
+        "Esta es la parte donde la tecnología cobra vida.", 
+        "Soy pequeño, pero útil.", 
+        "¡Ey!, ¡pero si soy yo!."
+      ],
+      [
+        "¡Caray!, ellos son mis creadores", 
+        "Conocer quiénes somos también es entender por qué hacemos esto.", 
+        "Nuestro objetivo es aportar herramientas reales para mejorar la atención."
+      ],
+      [
+        "Escríbenos, nos encantará leerte y conectar contigo.", 
+        "Una conversación puede ser el inicio de algo grande.", 
+        "Si tienes dudas o quieres colaborar, este es el lugar indicado."
+      ],
+    ];
+
+    function selectText(section : string){
+      let text = "";
+
+      const secciones = [
+        "inicio",
+        "tdo",
+        "tico",
+        "quienesSomos",
+        "contactanos"
+      ];
+
+      const index = secciones.indexOf(section);
+
+      if(indices[index] == 2)
+        indices[index] = 0;
+      else
+        indices[index]++;
+
+      text = dialogos[index][indices[index]];
+
+        const textos = 
+        [
+          {
+            seccion: "inicio",
+            texto: "Hola!, soy Tico, "
+          },
+          {
+            seccion: "tdo",
+            texto: "Nuestros servicios",
+          },
+          {
+            seccion: "tico",
+            texto: "Contáctanos"
+          },
+          {
+            seccion: "quienesSomos",
+            texto: "Contáctanos"
+          },
+          {
+            seccion: "contactanos",
+            texto: "Contáctanos"
+          }
+        ];
+
+      return text;
+    }
+
     useEffect(() => {
 
       const sections = document.querySelectorAll("section");
 
+      
+
       sections.forEach((section) => {
 
         const title = section.getAttribute("id");
-        const titles = {
-          "inicio": "Inicio",
-          "servicios": "Nuestros servicios",
-          "contacto": "Contáctanos"
-        };
+        
 
         if(!title)
           return;
@@ -395,8 +500,8 @@
           trigger: section,
           start: "top center",
           end: "bottom center",
-          onEnter: () => changeText(title),
-          onEnterBack: () => changeText(title)
+          onEnter: () => changeText(selectText(title)),
+          onEnterBack: () => changeText(selectText(title))
         });
 
       });
@@ -470,6 +575,60 @@
         });
       }
 
+    }, [open]);
+
+    useEffect(() => {
+      if (!open) {
+
+      const tl = gsap.timeline({
+        repeat: -1,
+        repeatDelay: 3
+      });
+
+      tl.to(tico.current, {
+        y: 10,
+        duration: 0.2,
+        ease: "linear"
+      });
+
+      tl.to(tico.current, {
+        y: -10,
+        duration: 0.4,
+        ease: "linear"
+      });
+      tl.to(tico.current, {
+        y: 10,
+        duration: 0.4,
+        ease: "linear"
+      });
+
+      tl.to(tico.current, {
+        y: -10,
+        duration: 0.4,
+        ease: "linear"
+      });
+      tl.to(tico.current, {
+        y: 10,
+        duration: 0.4,
+        ease: "linea"
+      });
+
+      tl.to(tico.current, {
+        y: -10,
+        duration: 0.4,
+        ease: "linear"
+      });
+
+      tl.to(tico.current, {
+        y: 0,
+        duration: 0.2,
+        ease: "linear"
+      });
+
+      } else {
+        gsap.killTweensOf(tico.current);
+        gsap.set(tico.current, { y: 0 });
+      }
     }, [open]);
 
     return (
@@ -698,7 +857,9 @@
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
                     <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
-                      <Bar data={data} options={options} />
+                      <div className="w-9/12 h-9/12 relative -left-5">
+                        <Bar data={data1} options={options1} className="h-full" height={"100%"}/>
+                      </div>
                     </div>           
                   </div>
                 </figure>
@@ -723,7 +884,9 @@
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
                     <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
-                        <Bar data={data} options={options} />
+                        <div className="w-3/4 h-3/4">
+                          <Bar data={data1} options={options1} />
+                        </div>
                     </div>           
                   </div>
                 </figure>
@@ -1169,22 +1332,25 @@
                   Tecnología y psicología unidas para mejorar la conducta infantil.
                 </small>
         </footer>
-
-        <div className="fixed left-0 lg:left-0 bottom-0 lg:bottom-4 z-2 inline-flex  items-end">
+                    
+        <div className="fixed left-0 lg:left-0 bottom-0 lg:bottom-0 z-2 inline-flex justify-start items-end-safe">
 
           <div className="relative -left-4 rounded-2xl px-6 pt-6 ">
+            <div className="size-60 absolute lg:-left-20 -left-33 blur-md lg:-bottom-74 -bottom-43  bg-grey"></div>
+            <img src="/png/caja_norma.png" alt="" className="size-60 absolute lg:-left-10 -left-8 lg:-bottom-32 -bottom-40"/>
+
             <img
               ref={tico}
-              src="/png/tico_good.png"
+              src="/png/tico_sitting_right.png"
               alt=""
-              className="peer relative z-10 w-25 min-w-25 lg:w-38 max-h-28 lg:max-h-40 cursor-pointer
-              transition-rotate duration-300 hover:-rotate-15
-              hover:opacity-85 rotate-y-180
+              className="peer relative z-10 w-25 lg:w-38 lg:max-h-40 cursor-pointer
+              transition-rotate duration-300 hover:-rotate-15 -left-3
+              hover:opacity-85 
               "
               onClick={() => setOpen(!open)}
             />
 
-            <div className="w-full h-full scale-x-110 scale-y-200 
+            {/* <div className="w-full h-full scale-x-110 scale-y-200 
               absolute -left-1 top-14
               opacity-0
               peer-hover:opacity-60
@@ -1193,13 +1359,13 @@
               duration-300
               radial-gradient
             "
-            ></div>
+            ></div> */}
           </div>
 
-          <div ref={boxRef} className={`duration-300 transition-all relative w-64 bg-none rounded-xl -left-12 `}>
-            <img src="/png/dialogo.png" alt="" className="absolute w-full h-full bottom-1/2 right-1/2 translate-1/2"/>
+          <div ref={boxRef} className={`duration-300 transition-all relative bottom-2 lg:bottom-4 -left-12 max-w-1/2 bg-none rounded-xl `}>
+            <img src="/png/dialogue.png" alt="" className="absolute w-full h-full bottom-1/2 right-1/2 translate-1/2 border-aqua border-2 rounded-lg shadow-2xl"/>
 
-            <p ref={textRef} className="p-10 text-white mb-3 tracking-widest mix-blend-difference relative">
+            <p ref={textRef} className="p-2 text-xs lg:text-lg text-white min-w-50 lg:min-h-18 tracking-widest mix-blend-difference relative ">
               Hola
             </p>
 
@@ -1212,54 +1378,58 @@
 
           </div>
         </div>
+        
 
         {loading && (
-          <div
-            ref={loaderRef}
-            className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden perspective-[1000px] *:overflow-hidden"
-          >
-            <div className="loader-bg bg-teal absolute inset-0">
-              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+          // <div
+          //   ref={loaderRef}
+          //   className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden perspective-[1000px] *:overflow-hidden"
+          // >
+          //   <div className="loader-bg bg-teal absolute inset-0">
+          //     <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
 
-              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+          //     <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
 
-              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
-            </div>
-            <div className="loader-bg bg-yellow absolute inset-0 translate-y-full">
-              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+          //     <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+          //   </div>
+          //   <div className="loader-bg bg-yellow absolute inset-0 translate-y-full">
+          //     <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
 
-              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+          //     <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
 
-              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
-            </div>
-            <div className="loader-bg bg-pink absolute inset-0 translate-y-full">
-              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+          //     <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+          //   </div>
+          //   <div className="loader-bg bg-pink absolute inset-0 translate-y-full">
+          //     <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
 
-              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+          //     <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
 
-              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
-            </div>
-            <div className="loader-bg bg-green absolute inset-0 translate-y-full">
-              <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
+          //     <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+          //   </div>
+          //   <div className="loader-bg bg-green absolute inset-0 translate-y-full">
+          //     <img src="/png/tico_gis1.png" alt=""  className="absolute -right-3/12 -top-2/12 lg:-right-1/12 lg:-top-2/12 w-xl lg:w-2xl opacity-50"/>
 
-              <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
+          //     <img src="/png/star1.png" alt=""  className="absolute -left-3/12 lg:-left-1/12 lg:-top-1/12 top-3/12 lg:bottom-3/8 w-7/8 lg:w-md opacity-60 rotate-30"/>
 
-              <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
-            </div>
-            <div className="loader-bg bg-grey/05 absolute inset-0 translate-y-full">
-            </div>
+          //     <img src="/png/triangle.png" alt=""  className="absolute left-3/12 lg:left-2/12 -bottom-1/12 w-7/8 lg:w-sm opacity-90 -rotate-20 lg:-rotate-10"/>
+          //   </div>
+          //   <div className="loader-bg bg-grey/05 absolute inset-0 translate-y-full">
+          //   </div>
 
-            <div id="logo" ref={logoRef} className="flex items-center gap-2 lg:gap-6 z-10 absolute top-1/2 left-1/2 -translate-1/2">
-              <img src="/svg/ticoHead.svg" className="size-20 lg:size-28" />
-              <p className="text-3xl lg:text-5xl font-bold text-grey">TICO</p>
-            </div>
+          //   <div id="logo" ref={logoRef} className="flex items-center gap-2 lg:gap-6 z-10 absolute top-1/2 left-1/2 -translate-1/2">
+          //     <img src="/svg/ticoHead.svg" className="size-20 lg:size-28" />
+          //     <p className="text-3xl lg:text-5xl font-bold text-grey">TICO</p>
+          //   </div>
 
 
-          </div>
+          // </div>
+
+          <LoadingScreen onDone={undefined}></LoadingScreen>
         )}
+
+
       </main>
 
-      
 
     );
   }

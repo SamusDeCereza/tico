@@ -10,6 +10,9 @@ h1, h2, h3 {
   font-family: var(--font-league);
 }
 
+canvas{
+  background: transparent !important; 
+}
 
 @theme {
   --color-grey: #333333;
