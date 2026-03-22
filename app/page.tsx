@@ -8,7 +8,7 @@
   import LoadingScreen from "./LoadingScreen";
   import { ChartData } from "chart.js";
   import { ScriptableContext } from "chart.js";
-
+  
   gsap.registerPlugin(ScrollTrigger);
 
   import {
@@ -365,36 +365,6 @@
       responsive: true,
       maintainAspectRatio: false,
 
-      animation: {
-        duration: 2000,
-        easing: "easeOutQuart"
-      },
-
-      animations: {
-        y: {
-          duration: 1200,
-          easing: (ctx: ScriptableContext<"bar">) => {
-            if (ctx.type !== "data") return "linear";
-
-            // 🌊 cada barra con easing diferente
-            const easings = [
-              "easeOutElastic",
-              "easeOutBounce",
-              "easeOutBack"
-            ];
-
-            return easings[ctx.dataIndex % easings.length];
-          },
-
-          delay: (ctx: ScriptableContext<"bar">) => {
-            if (ctx.type !== "data") return 0;
-
-            // 🌊 efecto ola
-            return ctx.dataIndex * 250;
-          }
-        }
-      },
-
       plugins: {
         legend: { display: false }
       },
@@ -411,38 +381,9 @@
     };
 
     const options2 = {
-      indexAxis: "y",
+      indexAxis: "y" as const,
       responsive: true,
       maintainAspectRatio: false,
-
-      animation: {
-        duration: 2000,
-        easing: "easeOutQuart"
-      },
-
-      animations: {
-        x: {
-          duration: 1200,
-
-          easing: (ctx: ScriptableContext<"bar">) => {
-            if (ctx.type !== "data") return "linear";
-
-            const easings = [
-              "easeOutElastic",
-              "easeOutBounce",
-              "easeOutBack"
-            ];
-
-            return easings[ctx.dataIndex % easings.length];
-          },
-
-          delay: (ctx: ScriptableContext<"bar">) => {
-            if (ctx.type !== "data") return 0;
-
-            return ctx.dataIndex * 250;
-          }
-        }
-      },
 
       plugins: {
         legend: { display: false }
@@ -508,8 +449,8 @@
     const [chartData, setChartData] = useState<ChartData<"bar"> | null>(null);
     const [chartData2, setChartData2] = useState<ChartData<"bar"> | null>(null);
 
-    const chartRef1 = useRef<ChartJS | null>(null);
-    const chartRef2 = useRef<ChartJS | null>(null);
+    const chartRef1 = useRef<ChartJS<'bar'> | null>(null);
+    const chartRef2 = useRef<ChartJS<'bar'> | null>(null);
 
     const [animateChart1, setAnimateChart1] = useState(false);
     const [animateChart2, setAnimateChart2] = useState(false);
