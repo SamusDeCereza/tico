@@ -344,7 +344,7 @@
   /* animation: spinRed 3s linear infinite;
   animation-timing-function: ease-in;
   transform-origin: right; */
-    animation: orbit 3s ease-in infinite;
+    animation: orbit 3s ease-in-out infinite;
     rotate: 215deg;
 }
 

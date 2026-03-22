@@ -6,6 +6,8 @@
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import LoadingScreen from "./LoadingScreen";
+  import { ChartData } from "chart.js";
+  import { ScriptableContext } from "chart.js";
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -224,7 +226,7 @@
                   "my-drawer-2",
               ) as HTMLInputElement;
               const closeMenuLinks = document.querySelectorAll(".closeMenu");
-              const drawerOverlay = document.querySelector(".drawer-overlay");
+              // const drawerOverlay = document.querySelector(".drawer-overlay");
 
 
               // Close drawer when clicking on navigation links
@@ -354,58 +356,278 @@
       });
 
     }, []);
-      
-    const data1 = {
-      labels: [
-        ["Prevalencia", "mínima 2%"], 
-        ["Prevalencia", "máxima 16%"], 
-        ["Población", "en riesgo 20%"]
-      ],
-      datasets: [
-        {
-          data: [20, 1600, 2000],
-        }
-      ]
-    };
+  
 
+    const [showChart1, setShowChart1] = useState(false);
+    const [showChart2, setShowChart2] = useState(false);
 
     const options1 = {
-      type: 'bar',
-      maintainAspectRatio: false,
-      aspectRatio: 1,
       responsive: true,
-      options: {
-        plugins: {
-          customCanvasBackgroundColor: {
-            color: 'lightGreen',
+      maintainAspectRatio: false,
+
+      animation: {
+        duration: 2000,
+        easing: "easeOutQuart"
+      },
+
+      animations: {
+        y: {
+          duration: 1200,
+          easing: (ctx: ScriptableContext<"bar">) => {
+            if (ctx.type !== "data") return "linear";
+
+            // 🌊 cada barra con easing diferente
+            const easings = [
+              "easeOutElastic",
+              "easeOutBounce",
+              "easeOutBack"
+            ];
+
+            return easings[ctx.dataIndex % easings.length];
+          },
+
+          delay: (ctx: ScriptableContext<"bar">) => {
+            if (ctx.type !== "data") return 0;
+
+            // 🌊 efecto ola
+            return ctx.dataIndex * 250;
           }
         }
       },
-      scales:{
+
+      plugins: {
+        legend: { display: false }
+      },
+
+      scales: {
         y: {
-          ticks: {
-            stepSize: 2000
-          },
+          display: false,
+          grid: { display: false }
         },
         x: {
-          grid:{
-            display: false
+          grid: { display: false }
+        }
+      }
+    };
+
+    const options2 = {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+
+      animation: {
+        duration: 2000,
+        easing: "easeOutQuart"
+      },
+
+      animations: {
+        x: {
+          duration: 1200,
+
+          easing: (ctx: ScriptableContext<"bar">) => {
+            if (ctx.type !== "data") return "linear";
+
+            const easings = [
+              "easeOutElastic",
+              "easeOutBounce",
+              "easeOutBack"
+            ];
+
+            return easings[ctx.dataIndex % easings.length];
+          },
+
+          delay: (ctx: ScriptableContext<"bar">) => {
+            if (ctx.type !== "data") return 0;
+
+            return ctx.dataIndex * 250;
           }
         }
       },
+
       plugins: {
-        legend: {
+        legend: { display: false }
+      },
+
+      scales: {
+        x: {
           display: false,
-          position: "top" as const
+          grid: { display: false }
         },
+        y: {
+          grid: { display: false }
+        }
       }
     };
+
+    useEffect(() => {
+      const canvas1 = chartRef1.current?.canvas;
+      const canvas2 = chartRef2.current?.canvas;
+
+      if (showChart1 && canvas1) {
+        gsap.from(canvas1, {
+          opacity: 0,
+          scale: 0.8,
+          duration: 1,
+          ease: "power3.out"
+        });
+      }
+
+      if (showChart2 && canvas2) {
+        gsap.from(canvas2, {
+          opacity: 0,
+          x: 50,
+          duration: 1,
+          ease: "power3.out"
+        });
+      }
+    }, [showChart1, showChart2]);
+
+    useEffect(() => {
+      const chart1 = chartRef1.current?.canvas;
+      const chart2 = chartRef2.current?.canvas;
+
+      if (chart1) {
+        ScrollTrigger.create({
+          trigger: chart1,
+          start: "top 80%",
+          onEnter: () => setShowChart1(true)
+        });
+      }
+
+      if (chart2) {
+        ScrollTrigger.create({
+          trigger: chart2,
+          start: "top 80%",
+          onEnter: () => setShowChart2(true)
+        });
+      }
+    }, []);
+
+
+
+    const [chartData, setChartData] = useState<ChartData<"bar"> | null>(null);
+    const [chartData2, setChartData2] = useState<ChartData<"bar"> | null>(null);
+
+    const chartRef1 = useRef<ChartJS | null>(null);
+    const chartRef2 = useRef<ChartJS | null>(null);
+
+    const [animateChart1, setAnimateChart1] = useState(false);
+    const [animateChart2, setAnimateChart2] = useState(false);
+
+    useEffect(() => {
+      const chart1 = chartRef1.current;
+      const chart2 = chartRef2.current;
+
+      if (chart1) {
+        ScrollTrigger.create({
+          trigger: chart1.canvas,
+          start: "top 80%",
+          once: true, // 🔥 solo una vez
+          onEnter: () => setAnimateChart1(true)
+        });
+      }
+
+      if (chart2) {
+        ScrollTrigger.create({
+          trigger: chart2.canvas,
+          start: "top 80%",
+          once: true,
+          onEnter: () => setAnimateChart2(true)
+        });
+      }
+    }, []);
+
+    useEffect(() => {
+      if (animateChart1 && chartRef1.current) {
+        chartRef1.current.update();
+      }
+    }, [animateChart1]);
+
+    useEffect(() => {
+      if (animateChart2 && chartRef2.current) {
+        chartRef2.current.update();
+      }
+    }, [animateChart2]);
+
+    useEffect(() => {
+      const chart = chartRef2.current;
+
+      if (!chart) return;
+
+      const ctx = chart.ctx;
+
+      // 🎨 Crear gradientes
+      const gradient1 = ctx.createLinearGradient(0, 0, 400, 0);
+      gradient1.addColorStop(0, "#F0E6BE");
+      gradient1.addColorStop(1, "#E7DDB7");
+
+      const gradient2 = ctx.createLinearGradient(0, 0, 400, 0);
+      gradient2.addColorStop(0, "#E0AAAF");
+      gradient2.addColorStop(1, "#E8B0B6");
+
+      const gradient3 = ctx.createLinearGradient(0, 0, 400, 0);
+      gradient3.addColorStop(0, "#B9D2B1");
+      gradient3.addColorStop(1, "#B1C9A9");
+
+      // 📊 Data con gradientes
+      setChartData({
+        labels: [
+          ["Comunicacion", "0.9%"], 
+          ["Hacer amigos", "3.2%"], 
+          ["Control del", "comportamiento", "2.9%"]
+        ],
+        datasets: [
+          {
+            data: [0.9, 3.2, 2.9],
+            backgroundColor: [gradient3, gradient2, gradient1],
+            borderRadius: 8
+          }
+        ]
+      });
+    }, []);
+
+    useEffect(() => {
+      const chart = chartRef1.current;
+
+      if (!chart) return;
+
+      const ctx = chart.ctx;
+
+      // 🎨 Crear gradientes
+      const gradient1 = ctx.createLinearGradient(0, 0, 400, 0);
+      gradient1.addColorStop(0, "#F0E6BE");
+      gradient1.addColorStop(1, "#E7DDB7");
+
+      const gradient2 = ctx.createLinearGradient(0, 0, 400, 0);
+      gradient2.addColorStop(0, "#E0AAAF");
+      gradient2.addColorStop(1, "#E8B0B6");
+
+      const gradient3 = ctx.createLinearGradient(0, 0, 400, 0);
+      gradient3.addColorStop(0, "#B9D2B1");
+      gradient3.addColorStop(1, "#B1C9A9");
+
+      // 📊 Data con gradientes
+      setChartData2({
+        labels: [
+          ["5-17 años", "8.6%"], 
+          ["2-17 años", "7.7%"], 
+          ["2-4 años", "3.7%",]
+        ],
+        datasets: [
+          {
+            data: [0.9, 3.2, 2.9],
+            backgroundColor: [gradient3, gradient2, gradient1],
+            borderRadius: 8 // 👈 se ve más moderno
+          }
+        ]
+      });
+    }, []);
 
     const [open, setOpen] = useState(false);
 
     const textRef = useRef<HTMLDivElement>(null);
 
-    let indices = [0, 0, 0, 0, 0];
+    const indices = [0, 0, 0, 0, 0];
 
     const dialogos = [
       [
@@ -846,7 +1068,11 @@
               <div className="px-8 lg:px-16 w-full flex flex-wrap justify-end gap-8">
                 <h3 className="reveal text-center lg:text-right font-bold text-3xl lg:text-4xl w-full">Impacto del TDO en niños y adolescentes en Mexico</h3>
 
-                <p className="reveal text-center lg:text-right text-lg lg:text-xl lg:w-100">En Mexico, el <b>TDO</b> esta presente en 1600 niños de cada 10 000. Una prevalencia del 16%</p>
+                <p className="reveal text-center lg:text-right text-lg lg:text-xl lg:w-100">
+                  {/* En Mexico, el <b>TDO</b> esta presente en 1600 niños de cada 10 000. Una prevalencia del 16% */}
+                  De acuerdo a una estimacion de la prevalencia del transtorno en mexico realizada en 2025,
+                  7.7% de los niños, niñas y adolescentes presentan dificultades en su comportamiento que podrían indicar TND
+                  </p>
               </div>
             </div>
 
@@ -857,8 +1083,8 @@
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
                     <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
-                      <div className="w-9/12 h-9/12 relative -left-5">
-                        <Bar data={data1} options={options1} className="h-full" height={"100%"}/>
+                      <div className="w-9/12 h-9/12 relative -left-3 bottom-4 scale-110">
+                        <Bar ref={chartRef1} data={chartData || { labels: [], datasets: [] }} options={options1} className="h-full" height={"100%"}/>
                       </div>
                     </div>           
                   </div>
@@ -884,8 +1110,8 @@
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
                     <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
-                        <div className="w-3/4 h-3/4">
-                          <Bar data={data1} options={options1} />
+                        <div className="w-3/4 h-3/4 relative left-6 -top-3 scale-115">
+                          <Bar ref={chartRef2} data={chartData2 || { labels: [], datasets: [] }} options={options2} />
                         </div>
                     </div>           
                   </div>
@@ -906,9 +1132,9 @@
                 <h3 className="reveal text-center lg:text-left font-bold text-3xl lg:text-4xl w-full">Edad vulnerable</h3>
 
                 <p className="reveal text-center lg:text-left text-lg lg:text-xl lg:w-100">
-                  La etapa entre 5 y 9 años es crucial para el correcto 
-                  diagnostico y tratamiento. No obstante, tambien
-                  puede presentarse en otras edades.
+                  Asimismo, es en el rango de 5 a 17 años en donde se presenta un mayor porcentaje de 8.6% con 
+                  señales/comportamientos correspondientes al transtorno desafiante negativista desafiante
+
                 </p>
               </div>
             </div>
@@ -1337,7 +1563,7 @@
 
           <div className="relative -left-4 rounded-2xl px-6 pt-6 ">
             <div className="size-60 absolute lg:-left-20 -left-33 blur-md lg:-bottom-74 -bottom-43  bg-grey"></div>
-            <img src="/png/caja_norma.png" alt="" className="size-60 absolute lg:-left-10 -left-8 lg:-bottom-32 -bottom-40"/>
+            {/* <img src="/png/caja_norma.png" alt="" className="size-60 absolute lg:-left-10 -left-8 lg:-bottom-32 -bottom-40"/> */}
 
             <img
               ref={tico}
@@ -1424,7 +1650,8 @@
 
           // </div>
 
-          <LoadingScreen onDone={undefined}></LoadingScreen>
+          // <LoadingScreen onDone={undefined}></LoadingScreen>
+          <h1>0</h1>
         )}
 
 
