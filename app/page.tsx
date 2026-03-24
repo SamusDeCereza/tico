@@ -1542,7 +1542,7 @@ import { inherits } from "node:util";
           </div>                
         </div>
 
-        <footer className="relative w-full min-h-24 mt-12 inset-shadow-sm  backdrop-blur-md shadow-md 
+        <footer className="relative w-full min-h-24 mt-18 inset-shadow-sm  backdrop-blur-md shadow-md 
         bg-grey/15 flex flex-wrap justify-center gap-4 lg:gap-20 lg:inline-flex lg:flex-nowrap items-center lg:items-end lg:justify-end  
         py-4 px-4 lg:pl-20 flex-col-reverse lg:flex-row">
           
@@ -1555,8 +1555,12 @@ import { inherits } from "node:util";
           
 
           <div className="relative w-full lg:w-auto">
-            <ul className="h-full grid lg:grid-cols-2 gap-6 lg:gap-2 items-center justify-center lg:justify-around *:text-center *:lg:text-left">
-              <li className="col-span-2 w-full text-center font-semibold">Rutas</li>
+            <ul className="h-full flex flex-wrap *:w-full *:lg:w-auto lg:grid lg:grid-cols-2 gap-4 lg:gap-2 items-center justify-center lg:justify-around *:text-center *:lg:text-left">
+              <li className="col-span-2 w-full text-center font-semibold">
+                <p className="text-center">
+                  Rutas
+                </p>
+                </li>
               <li>
                 <a href="#inicio">Inicio</a>
               </li>
@@ -1575,7 +1579,7 @@ import { inherits } from "node:util";
           <div className="grid flex items-center lg:items-end  gap-6 relative">
             <div className="inline-flex items-end gap-2 lg:justify-end justify-center">
               <p>
-                tico.support@gmail.com
+                soytico.support@gmail.com
               </p>
 
               <span><img src="/svg/ticoHead.svg" alt="" /></span>

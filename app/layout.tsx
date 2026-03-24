@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-white!" data-theme="tico">
+    <html lang="en" className="bg-white! scroll-smooth" data-theme="tico">
       <body
         className={`${poppins.variable} ${leagueSpartan.variable} antialiased `}
       >
