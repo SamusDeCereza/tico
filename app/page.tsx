@@ -6,6 +6,7 @@
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import LoadingScreen from "./LoadingScreen";
+  import Formulario from "./Formulario";
   import { ChartData } from "chart.js";
   import { ScriptableContext } from "chart.js";
   
@@ -23,6 +24,7 @@
   } from "chart.js";
 
   import { Bar } from "react-chartjs-2";
+import { inherits } from "node:util";
 
   ChartJS.register(
     CategoryScale,
@@ -52,11 +54,11 @@
     const [loading, setLoading] = useState(true);
     
     const images = [
-      "galery1.png",
-      "galery2.png",
-      "galery3.png",
-      "galery4.jpg",
-      "galery5.png",
+      "TV - 1.png",
+      "TV - 2.png",
+      "TV - 3.png",
+      "TV - 4.png",
+      "TV - 5.png",
     ];
 
     const prev = () => {
@@ -455,40 +457,42 @@
     const [animateChart1, setAnimateChart1] = useState(false);
     const [animateChart2, setAnimateChart2] = useState(false);
 
-    useEffect(() => {
-      const chart1 = chartRef1.current;
-      const chart2 = chartRef2.current;
 
-      if (chart1) {
-        ScrollTrigger.create({
-          trigger: chart1.canvas,
-          start: "top 80%",
-          once: true, // 🔥 solo una vez
-          onEnter: () => setAnimateChart1(true)
-        });
-      }
+    // useEffect(() => {
+    //   const chart1 = chartRef1.current;
+    //   const chart2 = chartRef2.current;
 
-      if (chart2) {
-        ScrollTrigger.create({
-          trigger: chart2.canvas,
-          start: "top 80%",
-          once: true,
-          onEnter: () => setAnimateChart2(true)
-        });
-      }
-    }, []);
+    //   if (chart1) {
+    //     ScrollTrigger.create({
+    //       trigger: chart1.canvas,
+    //       start: "top 80%",
+    //       once: true,
+    //       onEnter: () => setAnimateChart1(true)
+    //     });
+    //   }
 
-    useEffect(() => {
-      if (animateChart1 && chartRef1.current) {
-        chartRef1.current.update();
-      }
-    }, [animateChart1]);
+    //   if (chart2) {
+    //     ScrollTrigger.create({
+    //       trigger: chart2.canvas,
+    //       start: "top 80%",
+    //       once: true,
+    //       onEnter: () => setAnimateChart2(true)
+    //     });
+    //   }
+    // }, []);
 
-    useEffect(() => {
-      if (animateChart2 && chartRef2.current) {
-        chartRef2.current.update();
-      }
-    }, [animateChart2]);
+    // useEffect(() => {
+    //   if (animateChart1 && chartRef1.current) {
+    //     chartRef1.current.update();
+    //   }
+    // }, [animateChart1]);
+
+    // useEffect(() => {
+    //   if (animateChart2 && chartRef2.current) {
+    //     chartRef2.current.update();
+    //   }
+    // }, [animateChart2]);
+
 
     useEffect(() => {
       const chart = chartRef2.current;
@@ -521,7 +525,7 @@
           {
             data: [0.9, 3.2, 2.9],
             backgroundColor: [gradient3, gradient2, gradient1],
-            borderRadius: 8
+            borderRadius: 28
           }
         ]
       });
@@ -534,7 +538,6 @@
 
       const ctx = chart.ctx;
 
-      // 🎨 Crear gradientes
       const gradient1 = ctx.createLinearGradient(0, 0, 400, 0);
       gradient1.addColorStop(0, "#F0E6BE");
       gradient1.addColorStop(1, "#E7DDB7");
@@ -550,15 +553,15 @@
       // 📊 Data con gradientes
       setChartData2({
         labels: [
-          ["5-17 años", "8.6%"], 
-          ["2-17 años", "7.7%"], 
-          ["2-4 años", "3.7%",]
+          ["5-17", "años", "8.6%"], 
+          ["2-17", "años", "7.7%"], 
+          ["2-4", "años", "3.7%",]
         ],
         datasets: [
           {
             data: [0.9, 3.2, 2.9],
             backgroundColor: [gradient3, gradient2, gradient1],
-            borderRadius: 8 // 👈 se ve más moderno
+            borderRadius: 28
           }
         ]
       });
@@ -727,14 +730,24 @@
           opacity: 1,
           y: 0,
           duration: 0.2,
-          ease: "power2.out"
+          ease: "power2.out",
+          onStart: () => {
+            gsap.to(boxRef.current, {
+              display: "inherit"
+            });
+          }
         });
       } else {
         gsap.to(boxRef.current, {
           opacity: 0,
           y: 20,
           duration: 0.2,
-          ease: "power2.in"
+          ease: "power2.in",
+          onComplete: () => {
+            gsap.to(boxRef.current, {
+              display: "none"
+            });
+          }
         });
       }
 
@@ -1024,8 +1037,13 @@
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
                     <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
-                      <div className="w-9/12 h-9/12 relative -left-3 bottom-4 scale-110">
-                        <Bar ref={chartRef1} data={chartData || { labels: [], datasets: [] }} options={options1} className="h-full" height={"100%"}/>
+                      <div className="size-full lg:w-9/12 lg:h-9/12 relative lg:-left-2 lg:bottom-4 left-4 bottom-2 sm:scale-85! scale-95 lg:scale-110">
+                        <div className="hidden lg:block size-full">
+                          <Bar ref={chartRef1} data={chartData || { labels: [], datasets: [] }} options={options1} className="h-full " height={"100%"}/>
+                        </div>
+                        <div className="block lg:hidden size-full">
+                          <Bar ref={chartRef1} data={chartData || { labels: [], datasets: [] }} options={options2} className="h-full " height={"100%"}/>
+                        </div>
                       </div>
                     </div>           
                   </div>
@@ -1051,8 +1069,13 @@
                   {/* <img src="/png/grafica1.png" alt="" width={0} height={0} className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-11/12 h-11/12 rounded-full"/> */}
                   <div className="relative w-[80vw] h-[80vw] lg:w-106 lg:h-106 bg-linear-to-r from-aqua to-aqua-gradient rounded-full p-2.5">
                     <div className="bg-white relative w-full h-full rounded-full flex justify-center items-center overflow-hidden">
-                        <div className="w-3/4 h-3/4 relative left-6 -top-3 scale-115">
-                          <Bar ref={chartRef2} data={chartData2 || { labels: [], datasets: [] }} options={options2} />
+                        <div className="w-3/4 h-3/4 relative lg:left-6 lg:-top-1 -top-2 scale-110 lg:scale-115">
+                          <div className="size-full hidden lg:block">
+                            <Bar ref={chartRef2} data={chartData2 || { labels: [], datasets: [] }} options={options2} />
+                          </div>
+                          <div className="size-full block lg:hidden">
+                            <Bar ref={chartRef2} data={chartData2 || { labels: [], datasets: [] }} options={options1} />
+                          </div>
                         </div>
                     </div>           
                   </div>
@@ -1074,7 +1097,7 @@
 
                 <p className="reveal text-center lg:text-left text-lg lg:text-xl lg:w-100">
                   Asimismo, es en el rango de 5 a 17 años en donde se presenta un mayor porcentaje de 8.6% con 
-                  señales/comportamientos correspondientes al transtorno desafiante negativista desafiante
+                  señales o comportamientos correspondientes al transtorno desafiante negativista desafiante
 
                 </p>
               </div>
@@ -1103,15 +1126,15 @@
           </div> 
         </div>
 
-        <section id="tico" className="relative w-full z-1">
+        <section id="tico" className="relative w-full z-1 mt-8 lg:mt-0">
           
           <img src="/png/container_2.png" alt="" className="invisible lg:visible h-full w-full h-auto absolute top-1/2 -translate-y-1/2 left-0"/>
-          <img src="/png/container_2_2.png" alt="" className="lg:invisible h-full absolute top-1/2 -translate-y-1/2 left-0"/>
+          <img src="/png/container_2_2.png" alt="" className="lg:invisible w-full h-full absolute top-1/2 -translate-y-1/2 left-0"/>
 
           {/* <Image src="/svg/container_2.svg" alt="" fill className="h-auto w-auto"></Image> */}
           
           
-          <article className="w-full py-8 lg:py-24 relative">
+          <article className="w-full py-8 lg:py-24 pt-12! lg:pt-35! relative">
             
             <img src="/png/tico_gis1.png" alt=""  className="absolute right-0 top-1/12 lg:top-1/12 w-7/8 lg:w-3/8 opacity-70"/>
 
@@ -1134,7 +1157,7 @@
 
             </div>
 
-            <div className="py-0 relative w-full">
+            <div className="py-0 relative w-full pb-10">
 
               <div className="bg-grey/30 blur-sm absolute top-0 left-0 w-full h-full  ">
 
@@ -1166,7 +1189,7 @@
                             }}
                           >
                             <img
-                              src={"/png/" + src}
+                              src={"/png/game/" + src}
                               className="w-11/12 h-[60vh] object-cover rounded-2xl shadow-xl cursor-pointer"
                               onClick={() => {
                                 setActive(index);
@@ -1194,7 +1217,7 @@
                             `}
                           >
                             <img
-                              src={"/png/" + src}
+                              src={"/png/game/" + src}
                               alt=""
                               className="w-full h-full object-cover "
                               onClick={() => setActive(index)}
@@ -1239,10 +1262,24 @@
                 </div>
               </div>
 
+              <div className="relative reveal">
+                <div className="absolute w-10/12 lg:w-[calc(100%-240px)] h-11/12 left-1/2 -translate-1/2 top-1/2 bg-grey blur-lg"></div>
+                <img src="/png/caja_larga.png" alt="" className="absolute w-full lg:w-[calc(100%-160px)] h-full left-1/2 -translate-1/2 top-1/2 lg:block hidden"/>
+                <img src="/png/caja_ancha.png" alt="" className="absolute w-12/12 lg:w-[calc(100%-180px)] h-full left-1/2 -translate-1/2 top-1/2 block lg:hidden"/>
+
+
+                <p className="text-white/80 lg:text-xl text-md px-12 sm:px-18 lg:px-40 py-15 text-center  relative">
+                  Acompaña a Tico, tu robot amigo, en una divertida aventura llena de colores, retos y burbujas por explotar. 
+                  <br /><br />
+                  En este juego encontrarás increíbles minijuegos donde tendrás que poner a prueba tu atención, seguir 
+                  instrucciones y completar desafíos paso a paso.
+                </p>
+              </div>
+
             </div>
 
-            <div className="w-full flex justify-center py-10 mt-20 mb-12 lg:mt-35 lg:mb-30 relative">
-              <div className="absolute bg-grey/30 blur-sm w-full h-full scale-y-135 bottom-1/2 translate-y-1/2"></div>
+            <div className="w-full flex flex-wrap justify-center  mt-30  lg:mt-40 lg:mb-0 relative">
+              <div className="absolute bg-grey/30 blur-sm w-full h-full scale-y-120 bottom-[calc(50%+2rem)] translate-y-1/2"></div>
               <div className="reveal w-9/12 lg:w-7/12 relative">
                 <img src="/png/sideBarLeft.png" alt=""  className=" z-1 h-full left-0 -translate-x-full absolute scale-y-145 "/>
 
@@ -1266,9 +1303,34 @@
                   Your browser does not support the video tag.
                 </video>
               </div>
+
+              <div className="relative lg:mt-40 mt-15 reveal">
+                <div className="absolute w-10/12 lg:w-[calc(100%-240px)] h-11/12 left-1/2 -translate-1/2 top-1/2 bg-grey blur-lg"></div>
+                <img src="/png/caja_larga.png" alt="" className="absolute w-full lg:w-[calc(100%-160px)] h-full left-1/2 -translate-1/2 top-1/2 lg:block hidden"/>
+                <img src="/png/caja_ancha.png" alt="" className="absolute w-12/12 lg:w-[calc(100%-180px)] h-full left-1/2 -translate-1/2 top-1/2 block lg:hidden"/>
+
+
+                <ul className=" text-white/80 lg:text-xl text-md px-12 lg:px-40 py-15 text-center relative w-full
+                flex flex-wrap gap-6 justify-center lg:text-center
+                *:inline-flex  *:lg:w-auto *:items-center ">
+                  <li className="">
+                    <span><img src="/png/bubbles/burbuja_morada.png" alt="" className="w-16" /></span>
+                     <p>Disfruta de una variedad de juegos</p>
+                  </li>
+                  <li>
+                    <span><img src="/png/bubbles/burbuja_verde.png" alt="" className="w-16" /></span>
+                     Mejora tu concentración y habilidades
+                  </li>
+                  <li>
+                    <span><img src="/png/bubbles/burbuja_naranja.png" alt="" className="w-16" /></span>
+                     Sumérgete un mundo lleno de colores y diversión
+                  </li>
+                </ul>
+                
+              </div>
             </div>
 
-            <div className="grid inline-flex w-full items-center justify-center my-4 lg:my-8 rotate-180">
+            <div className="grid inline-flex w-full items-center justify-center my-4 lg:my-12 mt-18! rotate-180">
               <div className="w-4/12">
                 <img src="/png/line1.png" alt=""  className="w-full"/>
               </div>
@@ -1285,6 +1347,7 @@
 
           </article>
 
+            
         </section>
         
 
@@ -1307,13 +1370,15 @@
         </div>
 
         <section id="quienesSomos" className="text-grey relative z-1 pt-6 pb-12 w-full px-8 lg:px-0">
-          <h2 className="reveal text-3xl lg:text-5xl font-bold text-center mb-4 lg:mb-16">¿Quiénes somos?</h2>
+          <h2 className="reveal text-3xl lg:text-5xl font-bold text-center mb-4">¿Quiénes somos?</h2>
 
           <article className="grid grid-cols-12 *:flex *:items-start *:justify-center lg:px-12 gap-6 lg:gap-0">
 
-            <div className="col-span-12 lg:col-span-7 lg:px-30 w-full">
+            <div className="col-span-12 lg:col-span-7 lg:px-10 w-full">
               <div className="z-1 flex items-center w-full h-full">
-                  <p className="reveal text-center text-lg lg:text-xl w-full h-fit">Somos una iniciativa que une tecnología y psicología para atender el Trastorno Desafiante por Oposición.
+                  <p className="reveal text-center text-lg lg:text-xl w-full h-fit">
+                    Somos una iniciativa que une tecnología y psicología para atender el Trastorno Desafiante por Oposición.
+                    <br /><br />
                     Diseñamos un videojuego terapéutico capaz de medir y registrar métricas de conducta en tiempo real mientras el paciente interactúa con la plataforma.
                   </p>
               </div>
@@ -1322,7 +1387,7 @@
             <div className="z-1 col-span-12 lg:col-span-5">
               <div className="reveal-3d">
                 <figure className="border-grey/30 border-8 p-1 lg:p-4 border-dashed">
-                  <img src="/png/ab1.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2"/>
+                  <img src="/jpg/utcv.jpg" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2"/>
                 </figure>
                 <div></div>
                 <div></div>
@@ -1336,7 +1401,7 @@
             </div>
           </article>
 
-          <article className="relative flex wrap flex-col-reverse lg:grid grid-cols-12 *:flex *:justify-center lg:px-12 mt-6 lg:mt-12 gap-6 lg:gap-0">
+          <article className="relative flex wrap flex-col-reverse lg:grid grid-cols-12 *:flex *:justify-center lg:px-12 mt-6 lg:mt-0 gap-6 lg:gap-0">
 
             <div className="absolute -top-1/2 lg:-top-3/4 right-1/4">
               <div className="*:overflow-visible! *:w-full *:h-full">
@@ -1349,7 +1414,7 @@
             <div className="z-1 relative col-span-12 lg:col-span-5">
               <div className="reveal-3d">
                 <figure className="border-grey/30 border-8 p-1 lg:p-4 border-dashed">
-                  <img src="/png/ab2.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2"/>
+                  <img src="/png/ab2.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2 lg:max-w-80"/>
                 </figure>
                 <div></div>
                 <div></div>
@@ -1363,9 +1428,11 @@
             
             </div>
 
-            <div className="z-1 relative col-span-12 lg:col-span-7 lg:px-30 text-grey flex items-center! h-full">
+            <div className="z-1 relative col-span-12 lg:col-span-7 lg:px-10 text-grey flex items-center! h-full">
               <p className="reveal text-lg lg:text-xl text-center">
-                Buscamos proporcionar información clave al especialista para su análisis. Al recibir estos datos, el terapeuta puede evaluar los resultados y detectar con precisión los puntos fuertes del niño, facilitando un tratamiento basado en evidencia concreta.
+                Buscamos proporcionar información clave al especialista para su análisis. 
+                <br /><br />
+                Al recibir estos datos, el terapeuta puede evaluar los resultados y detectar con precisión los puntos fuertes del niño, facilitando un tratamiento basado en evidencia concreta.
               </p>
             </div>
 
@@ -1421,6 +1488,8 @@
                   <div className="size-5 lg:size-6 bg-yellow inset-shadow-xs rounded-full absolute right-4 lg:right-8 translate-x-1/2 top-7/12"></div>
                   <div className="size-5 lg:size-6 bg-yellow inset-shadow-xs rounded-full absolute right-4 lg:right-8 translate-x-1/2 top-10/12"></div>
                 
+
+{/*                 
                   <form action="" className="z-1 relative lg:px-12 *:w-full flex flex-wrap items-center gap-8 w-full h-full text-lg p-4 lg:p-0 mr-8 lg:mr-0 border-r-4 lg:border-r-0 border-red-400/30">
                     
                     <h3 className="text-4xl font-bold text-center w-full h-fit relative">Formulario</h3>
@@ -1436,7 +1505,10 @@
                     <div className="flex justify-center">
                       <input type="submit" className="btn bg-aqua border border-none text-grey/80 px-8" />
                     </div>
-                  </form>
+                  </form> */}
+
+                  <Formulario></Formulario>
+
                 </div>
               </div>
             </div>
@@ -1470,40 +1542,59 @@
           </div>                
         </div>
 
-        <footer className="relative w-full min-h-24 mt-12 inset-shadow-sm  backdrop-blur-md shadow-md bg-grey/15 grid justify-center gap-4 lg:inline-flex items-center lg:justify-between py-4 px-4">
-                <div className="inline-flex items-center gap-6">
-                  <img src="/svg/ticoHead.svg" alt="" />
-                  <p>tico.support@gmail.com</p>
-                </div>
+        <footer className="relative w-full min-h-24 mt-12 inset-shadow-sm  backdrop-blur-md shadow-md 
+        bg-grey/15 flex flex-wrap justify-center gap-4 lg:gap-20 lg:inline-flex lg:flex-nowrap items-center lg:items-end lg:justify-end  
+        py-4 px-4 lg:pl-20 flex-col-reverse lg:flex-row">
+          
+
+          <div className="inline-flex items-end gap-4 lg:gap-20">
+            <img src="/png/bloques_izquierda.png" alt="" className="size-16 lg:size-20 rotate-y-180 relative"/>                
+            <img src="/png/bloques_derecha.png" alt="" className="size-24 lg:size-28 relative  "/>
+            <img src="/png/bloques_izquierda.png" alt="" className="size-16 lg:size-20 relative  "/>
+          </div>
+          
+
+          <div className="relative w-full lg:w-auto">
+            <ul className="h-full grid lg:grid-cols-2 gap-6 lg:gap-2 items-center justify-center lg:justify-around *:text-center *:lg:text-left">
+              <li className="col-span-2 w-full text-center font-semibold">Rutas</li>
+              <li>
+                <a href="#inicio">Inicio</a>
+              </li>
+              <li>
+                <a href="#tdo">TDO</a>
+              </li>
+              <li>
+                <a href="#tico">Tico</a>
+              </li>
+              <li>
+                <a href="#contactanos">Contactanos</a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="grid flex items-center lg:items-end  gap-6 relative">
+            <div className="inline-flex items-end gap-2 lg:justify-end justify-center">
+              <p>
+                tico.support@gmail.com
+              </p>
+
+              <span><img src="/svg/ticoHead.svg" alt="" /></span>
+
+            </div>
+            
+            <small>
+            Tecnología y psicología unidas para mejorar la conducta infantil.
+            </small>
+
+          </div>
+
                 
-                <div>
-                  <ul className="h-full grid lg:grid-cols-2 gap-2 items-center">
-                    <li className="col-span-2 w-full text-center font-semibold">Rutas</li>
-                    <li>
-                      <a href="#inicio">Inicio</a>
-                    </li>
-                    <li>
-                      <a href="#tdo">TDO</a>
-                    </li>
-                    <li>
-                      <a href="#tico">Tico</a>
-                    </li>
-                    <li>
-                      <a href="#contactanos">Contactanos</a>
-                    </li>
-                  </ul>
-                </div>
-
-
-                <small>
-                  Tecnología y psicología unidas para mejorar la conducta infantil.
-                </small>
         </footer>
                     
         <div className="fixed left-0 lg:left-0 bottom-0 lg:bottom-0 z-2 inline-flex justify-start items-end-safe">
 
           <div className="relative -left-4 rounded-2xl px-6 pt-6 ">
-            <div className="size-60 absolute lg:-left-20 -left-33 blur-md lg:-bottom-74 -bottom-43  bg-grey"></div>
+            {/* <div className="size-60 absolute lg:-left-20 -left-33 blur-md lg:-bottom-74 -bottom-43  bg-grey"></div> */}
             {/* <img src="/png/caja_norma.png" alt="" className="size-60 absolute lg:-left-10 -left-8 lg:-bottom-32 -bottom-40"/> */}
 
             <img
@@ -1511,8 +1602,8 @@
               src="/png/tico_sitting_right.png"
               alt=""
               className="peer relative z-10 w-25 lg:w-38 lg:max-h-40 cursor-pointer
-              transition-rotate duration-300 hover:-rotate-15 -left-3
-              hover:opacity-85 
+              transition-rotate duration-300 -left-3
+              hover:opacity-85 hover:-rotate-15
               "
               onClick={() => setOpen(!open)}
             />
@@ -1529,7 +1620,7 @@
             ></div> */}
           </div>
 
-          <div ref={boxRef} className={`duration-300 transition-all relative bottom-2 lg:bottom-4 -left-12 max-w-1/2 bg-none rounded-xl `}>
+          <div ref={boxRef} className={`duration-300 transition-all  relative bottom-2 lg:bottom-4 -left-12 max-w-3/4 bg-none rounded-xl w-fit`}>
             <img src="/png/dialogue.png" alt="" className="absolute w-full h-full bottom-1/2 right-1/2 translate-1/2 border-aqua border-2 rounded-lg shadow-2xl"/>
 
             <p ref={textRef} className="p-2 text-xs lg:text-lg text-white min-w-50 lg:min-h-18 tracking-widest mix-blend-difference relative ">
@@ -1591,8 +1682,7 @@
 
           // </div>
 
-          // <LoadingScreen onDone={undefined}></LoadingScreen>
-          <h1>0</h1>
+          <LoadingScreen onDone={undefined}></LoadingScreen>
         )}
 
 
