@@ -1620,7 +1620,7 @@ import { inherits } from "node:util";
             ></div> */}
           </div>
 
-          <div ref={boxRef} className={`duration-300 transition-all  relative bottom-2 lg:bottom-4 -left-12 max-w-3/4 bg-none rounded-xl w-fit`}>
+          <div ref={boxRef} className={`duration-300 transition-all  relative bottom-2 lg:bottom-4 -left-12 max-w-3/4 lg:max-w-1/2 bg-none rounded-xl w-fit`}>
             <img src="/png/dialogue.png" alt="" className="absolute w-full h-full bottom-1/2 right-1/2 translate-1/2 border-aqua border-2 rounded-lg shadow-2xl"/>
 
             <p ref={textRef} className="p-2 text-xs lg:text-lg text-white min-w-50 lg:min-h-18 tracking-widest mix-blend-difference relative ">
