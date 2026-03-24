@@ -1387,7 +1387,7 @@ import { inherits } from "node:util";
             <div className="z-1 col-span-12 lg:col-span-5">
               <div className="reveal-3d">
                 <figure className="border-grey/30 border-8 p-1 lg:p-4 border-dashed">
-                  <img src="/jpg/utcv.jpg" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2"/>
+                  <img src="/png/ab3.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2"/>
                 </figure>
                 <div></div>
                 <div></div>
@@ -1414,7 +1414,7 @@ import { inherits } from "node:util";
             <div className="z-1 relative col-span-12 lg:col-span-5">
               <div className="reveal-3d">
                 <figure className="border-grey/30 border-8 p-1 lg:p-4 border-dashed">
-                  <img src="/png/ab2.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2 lg:max-w-80"/>
+                  <img src="/png/ab4.png" alt="" className="w-100 bg-linear-to-l from-aqua to-aqua-gradient p-2 lg:max-w-80"/>
                 </figure>
                 <div></div>
                 <div></div>
